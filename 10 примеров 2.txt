@@ -1,0 +1,194 @@
+```sql
+-- ===============================================================
+-- 1. ШКОЛА
+-- ===============================================================
+IF OBJECT_ID('School_Original', 'U') IS NOT NULL DROP TABLE School_Original;
+CREATE TABLE School_Original (
+    class_id INT,
+    class_name NVARCHAR(50),
+    teacher_name NVARCHAR(100),
+    subject NVARCHAR(100),
+    student_name NVARCHAR(100),
+    student_phone NVARCHAR(20),
+    schedule_day NVARCHAR(20),
+    schedule_time NVARCHAR(20),
+    grade DECIMAL(3,1),
+    semester INT
+);
+INSERT INTO School_Original VALUES
+(1, '10А', 'Смирнова Л.В.', 'Математика', 'Иванов Петр', '+7-912-123-45-67', 'Понедельник', '08:30', 4.8, 1),
+(2, '10Б', 'Кузнецов А.Г.', 'История', 'Петрова Мария', '+7-923-654-32-10', 'Среда', '10:15', 4.5, 1);
+SELECT * FROM School_Original;
+
+-- ===============================================================
+-- 2. ПОЛИКЛИНИКА
+-- ===============================================================
+IF OBJECT_ID('Clinic_Original', 'U') IS NOT NULL DROP TABLE Clinic_Original;
+CREATE TABLE Clinic_Original (
+    visit_id INT,
+    patient_name NVARCHAR(100),
+    doctor_name NVARCHAR(100),
+    department NVARCHAR(100),
+    diagnosis NVARCHAR(200),
+    visit_date DATE,
+    next_visit DATE,
+    patient_phone NVARCHAR(20),
+    status NVARCHAR(20)
+);
+INSERT INTO Clinic_Original VALUES
+(1, 'Иванов Алексей', 'Сидорова Е.В.', 'Терапия', 'ОРВИ', '2024-03-10', '2024-03-24', '+7-911-456-78-90', 'Активен'),
+(2, 'Петрова Ольга', 'Козлов И.А.', 'Кардиология', 'Гипертония', '2024-02-18', '2024-03-05', '+7-987-123-45-67', 'Наблюдение');
+SELECT * FROM Clinic_Original;
+
+-- ===============================================================
+-- 3. АПТЕКА
+-- ===============================================================
+IF OBJECT_ID('Pharmacy_Original', 'U') IS NOT NULL DROP TABLE Pharmacy_Original;
+CREATE TABLE Pharmacy_Original (
+    sale_id INT,
+    medicine_name NVARCHAR(100),
+    category NVARCHAR(50),
+    customer_name NVARCHAR(100),
+    prescription BIT,
+    quantity INT,
+    price DECIMAL(10,2),
+    sale_date DATE,
+    pharmacist_name NVARCHAR(100)
+);
+INSERT INTO Pharmacy_Original VALUES
+(1, 'Парацетамол', 'Жаропонижающее', 'Иванов И.И.', 0, 2, 120.00, '2024-05-01', 'Соколова Н.П.'),
+(2, 'Амоксициллин', 'Антибиотик', 'Петров П.П.', 1, 1, 250.00, '2024-05-02', 'Морозова Е.В.');
+SELECT * FROM Pharmacy_Original;
+
+-- ===============================================================
+-- 4. СТОМАТОЛОГИЧЕСКАЯ КЛИНИКА
+-- ===============================================================
+IF OBJECT_ID('DentClinic_Original', 'U') IS NOT NULL DROP TABLE DentClinic_Original;
+CREATE TABLE DentClinic_Original (
+    record_id INT,
+    patient_name NVARCHAR(100),
+    doctor_name NVARCHAR(100),
+    procedure NVARCHAR(100),
+    cost DECIMAL(10,2),
+    appointment_date DATE,
+    next_visit DATE,
+    phone NVARCHAR(20)
+);
+INSERT INTO DentClinic_Original VALUES
+(1, 'Орлова А.А.', 'Титов Д.Н.', 'Пломбирование', 1800.00, '2024-06-12', '2024-12-12', '+7-921-111-22-33'),
+(2, 'Кузнецов В.В.', 'Ильина О.А.', 'Удаление зуба', 2500.00, '2024-06-15', NULL, '+7-922-444-55-66');
+SELECT * FROM DentClinic_Original;
+
+-- ===============================================================
+-- 5. ИНТЕРНЕТ-ПРОВАЙДЕР
+-- ===============================================================
+IF OBJECT_ID('Provider_Original', 'U') IS NOT NULL DROP TABLE Provider_Original;
+CREATE TABLE Provider_Original (
+    client_id INT,
+    client_name NVARCHAR(100),
+    tariff NVARCHAR(50),
+    speed INT,
+    monthly_fee DECIMAL(10,2),
+    connection_date DATE,
+    city NVARCHAR(100),
+    technician_name NVARCHAR(100)
+);
+INSERT INTO Provider_Original VALUES
+(1, 'Иванов Петр', 'Оптика-100', 100, 800.00, '2023-11-10', 'Москва', 'Смирнов А.А.'),
+(2, 'Петров Сергей', 'Домашний-50', 50, 600.00, '2024-02-01', 'Казань', 'Кузнецова И.В.');
+SELECT * FROM Provider_Original;
+
+-- ===============================================================
+-- 6. КИНОТЕАТР
+-- ===============================================================
+IF OBJECT_ID('Cinema_Original', 'U') IS NOT NULL DROP TABLE Cinema_Original;
+CREATE TABLE Cinema_Original (
+    session_id INT,
+    movie_title NVARCHAR(100),
+    genre NVARCHAR(50),
+    hall NVARCHAR(20),
+    start_time DATETIME,
+    end_time DATETIME,
+    viewer_name NVARCHAR(100),
+    ticket_price DECIMAL(10,2)
+);
+INSERT INTO Cinema_Original VALUES
+(1, 'Дюна 2', 'Фантастика', 'Зал 1', '2024-03-12 19:00', '2024-03-12 21:45', 'Павлов И.И.', 450.00),
+(2, 'Чебурашка', 'Комедия', 'Зал 2', '2024-03-13 18:00', '2024-03-13 19:30', 'Петрова А.А.', 350.00);
+SELECT * FROM Cinema_Original;
+
+-- ===============================================================
+-- 7. ЗАВОД
+-- ===============================================================
+IF OBJECT_ID('Factory_Original', 'U') IS NOT NULL DROP TABLE Factory_Original;
+CREATE TABLE Factory_Original (
+    shift_id INT,
+    worker_name NVARCHAR(100),
+    department NVARCHAR(100),
+    product NVARCHAR(100),
+    quantity INT,
+    shift_date DATE,
+    supervisor_name NVARCHAR(100)
+);
+INSERT INTO Factory_Original VALUES
+(1, 'Иванов А.Н.', 'Цех №1', 'Деталь А-12', 150, '2024-07-01', 'Петров В.В.'),
+(2, 'Сидоров В.Н.', 'Цех №2', 'Деталь Б-22', 220, '2024-07-02', 'Кузнецова Т.С.');
+SELECT * FROM Factory_Original;
+
+-- ===============================================================
+-- 8. ЦЕНТР ЗАНЯТОСТИ
+-- ===============================================================
+IF OBJECT_ID('Employment_Original', 'U') IS NOT NULL DROP TABLE Employment_Original;
+CREATE TABLE Employment_Original (
+    record_id INT,
+    jobseeker_name NVARCHAR(100),
+    profession NVARCHAR(100),
+    employer NVARCHAR(100),
+    vacancy NVARCHAR(100),
+    interview_date DATE,
+    status NVARCHAR(20)
+);
+INSERT INTO Employment_Original VALUES
+(1, 'Орлов Николай', 'Бухгалтер', 'ООО ФинЭксперт', 'Главный бухгалтер', '2024-05-10', 'В процессе'),
+(2, 'Петрова Анна', 'Инженер', 'ЗАО ТехПроект', 'Инженер-конструктор', '2024-05-15', 'Принят');
+SELECT * FROM Employment_Original;
+
+-- ===============================================================
+-- 9. ТУРИСТИЧЕСКОЕ АГЕНТСТВО
+-- ===============================================================
+IF OBJECT_ID('TravelAgency_Original', 'U') IS NOT NULL DROP TABLE TravelAgency_Original;
+CREATE TABLE TravelAgency_Original (
+    booking_id INT,
+    client_name NVARCHAR(100),
+    tour_name NVARCHAR(100),
+    country NVARCHAR(100),
+    hotel_name NVARCHAR(100),
+    departure_date DATE,
+    return_date DATE,
+    guide_name NVARCHAR(100),
+    price DECIMAL(10,2)
+);
+INSERT INTO TravelAgency_Original VALUES
+(1, 'Иванова Мария', 'Отдых в Турции', 'Турция', 'SunResort', '2024-06-10', '2024-06-20', 'Сергеев П.П.', 85000.00),
+(2, 'Кузнецов Алексей', 'Экскурсия в Италию', 'Италия', 'RomaHotel', '2024-07-05', '2024-07-15', 'Поляков В.В.', 120000.00);
+SELECT * FROM TravelAgency_Original;
+
+-- ===============================================================
+-- 10. ФИТНЕС-ЦЕНТР
+-- ===============================================================
+IF OBJECT_ID('Fitness_Original', 'U') IS NOT NULL DROP TABLE Fitness_Original;
+CREATE TABLE Fitness_Original (
+    member_id INT,
+    member_name NVARCHAR(100),
+    trainer_name NVARCHAR(100),
+    membership_type NVARCHAR(50),
+    start_date DATE,
+    end_date DATE,
+    hall NVARCHAR(50),
+    monthly_fee DECIMAL(10,2)
+);
+INSERT INTO Fitness_Original VALUES
+(1, 'Иванова Ольга', 'Смирнов Павел', 'Йога', '2024-01-10', '2024-07-10', 'Зал №1', 2500.00),
+(2, 'Козлов Андрей', 'Морозова Анна', 'Силовые тренировки', '2024-03-01', '2024-09-01', 'Зал №2', 3000.00);
+SELECT * FROM Fitness_Original;
+```
