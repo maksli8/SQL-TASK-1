@@ -1,0 +1,998 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JS Tasks — Качество кода (100 заданий с ответами)</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap");
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #13131a;
+      --card: #1a1a25;
+      --border: #2a2a3d;
+      --accent: #f97316;
+      --accent2: #facc15;
+      --accent3: #4ade80;
+      --accent4: #38bdf8;
+      --accent5: #ef4444;
+      --accent6: #c084fc;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --answer-bg: #0f0f1a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background:
+        radial-gradient(ellipse at 10% 30%, rgba(249, 115, 22, 0.08) 0%, transparent 45%),
+        radial-gradient(ellipse at 90% 70%, rgba(250, 204, 21, 0.06) 0%, transparent 45%),
+        radial-gradient(ellipse at 55% 10%, rgba(192, 132, 252, 0.05) 0%, transparent 40%);
+      animation: bgPulse 22s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes bgPulse {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(1%, 2%) scale(1.02); }
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      padding: 64px 20px 44px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #f97316, #facc15);
+      color: #0a0a0f;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      border-radius: 20px;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 4.8rem);
+      font-weight: 900;
+      line-height: 1.08;
+      background: linear-gradient(135deg, #fff 0%, #f97316 40%, #facc15 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 14px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 44px;
+      line-height: 1.6;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .stat-chip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 18px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 0.88rem;
+    }
+
+    .stat-chip .num {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .progress-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 24px;
+      margin-bottom: 36px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .progress-label {
+      font-weight: 600;
+      font-size: 0.93rem;
+      white-space: nowrap;
+    }
+    .progress-bar-outer {
+      flex: 1;
+      min-width: 180px;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-bar-inner {
+      height: 100%;
+      background: linear-gradient(90deg, #f97316, #facc15);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+    .progress-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.88rem;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .btn-reset {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 15px;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: "Inter", sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-reset:hover {
+      border-color: var(--accent5);
+      color: var(--accent5);
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 44px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-wrap {
+      flex: 1;
+      min-width: 240px;
+      position: relative;
+    }
+
+    .search-wrap input {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 16px 11px 42px;
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      font-size: 0.93rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-wrap input:focus {
+      border-color: var(--accent);
+    }
+    .search-wrap::before {
+      content: "🔍";
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .filter-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 15px;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: "Inter", sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      border-color: var(--accent);
+      color: #fff;
+      background: rgba(249, 115, 22, 0.15);
+    }
+
+    .topic-section {
+      margin-bottom: 64px;
+    }
+
+    .topic-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 10;
+    }
+
+    .topic-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .topic-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .topic-meta {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .topic-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--muted);
+      background: var(--surface);
+      padding: 4px 11px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .task-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 14px;
+    }
+
+    .task-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.22s;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .task-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 16px;
+      background: radial-gradient(circle at 50% 0%, var(--card-glow, rgba(249, 115, 22, 0.06)) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .task-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--card-color, #f97316), transparent);
+      opacity: 0;
+      transition: opacity 0.22s;
+    }
+
+    .task-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 36px rgba(0, 0, 0, 0.32);
+    }
+    .task-card:hover::before,
+    .task-card:hover::after {
+      opacity: 1;
+    }
+
+    .task-card.done {
+      background: rgba(74, 222, 128, 0.06);
+      border-color: rgba(74, 222, 128, 0.28);
+    }
+    .task-card.done::before {
+      opacity: 1;
+      background: linear-gradient(90deg, #4ade80, transparent);
+    }
+
+    .task-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 13px;
+    }
+
+    .task-num {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.73rem;
+      color: var(--muted);
+      background: var(--surface);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .difficulty {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .diff-easy {
+      background: rgba(74, 222, 128, 0.13);
+      color: #4ade80;
+    }
+    .diff-medium {
+      background: rgba(250, 204, 21, 0.13);
+      color: #facc15;
+    }
+    .diff-hard {
+      background: rgba(239, 68, 68, 0.13);
+      color: #ef4444;
+    }
+
+    .task-text {
+      font-size: 0.92rem;
+      line-height: 1.68;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+
+    .task-text code {
+      font-family: "JetBrains Mono", monospace;
+      background: var(--surface);
+      color: #f97316;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.84em;
+    }
+
+    .answer-block {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      background: var(--answer-bg);
+      border-left: 3px solid var(--card-color, #f97316);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 12px 0 10px;
+      color: #cbd5e1;
+      display: none;
+      font-family: "Inter", sans-serif;
+    }
+    
+    .answer-block.show {
+      display: block;
+    }
+    
+    .answer-block code {
+      font-family: "JetBrains Mono", monospace;
+      background: #1e1e2e;
+      color: #f97316;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.84em;
+    }
+    
+    .answer-block pre {
+      background: #1e1e2e;
+      padding: 10px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 10px 0 0;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.8rem;
+    }
+
+    .code-block {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.77rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #94a3b8;
+      margin-bottom: 14px;
+      white-space: pre;
+      overflow-x: auto;
+      line-height: 1.65;
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .btn-done {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 15px;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: "Inter", sans-serif;
+      font-size: 0.79rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      pointer-events: auto;
+    }
+    .btn-done:hover {
+      border-color: #4ade80;
+      color: #4ade80;
+    }
+    .task-card.done .btn-done {
+      background: rgba(74, 222, 128, 0.1);
+      border-color: #4ade80;
+      color: #4ade80;
+    }
+
+    .float-counter {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: linear-gradient(135deg, #f97316, #facc15);
+      border-radius: 20px;
+      padding: 13px 22px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #0a0a0f;
+      box-shadow: 0 8px 32px rgba(249, 115, 22, 0.45);
+      z-index: 100;
+      transition: transform 0.2s;
+    }
+    .float-counter:hover {
+      transform: scale(1.06);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+
+    @media (max-width: 640px) {
+      .task-grid {
+        grid-template-columns: 1fr;
+      }
+      h1 {
+        font-size: 2.3rem;
+      }
+      .float-counter {
+        bottom: 14px;
+        right: 14px;
+        padding: 10px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="badge">✦ JavaScript Practice</div>
+    <h1>100 заданий<br>Качество кода</h1>
+    <p class="subtitle">Отладка · Стиль · Комментарии · Ниндзя-код · Mocha · Полифилы</p>
+    <div class="stats">
+      <div class="stat-chip"><span class="num">100</span>&nbsp;заданий</div>
+      <div class="stat-chip"><span class="num">7</span>&nbsp;тем</div>
+      <div class="stat-chip"><span class="num" id="easyCount">0</span>&nbsp;лёгких</div>
+      <div class="stat-chip"><span class="num" id="medCount">0</span>&nbsp;средних</div>
+      <div class="stat-chip"><span class="num" id="hardCount">0</span>&nbsp;сложных</div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="progress-wrap">
+      <span class="progress-label">⚡ Прогресс</span>
+      <div class="progress-bar-outer">
+        <div class="progress-bar-inner" id="progressBar" style="width: 0%"></div>
+      </div>
+      <span class="progress-count" id="progressText">0 / 100</span>
+      <button class="btn-reset" onclick="resetAll()">Сбросить</button>
+    </div>
+
+    <div class="controls">
+      <div class="search-wrap">
+        <input type="text" id="searchInput" placeholder="Поиск задания..." oninput="filterTasks()">
+      </div>
+      <button class="filter-btn active" onclick="setFilter('all', this)">Все</button>
+      <button class="filter-btn" onclick="setFilter('easy', this)">Лёгкие</button>
+      <button class="filter-btn" onclick="setFilter('medium', this)">Средние</button>
+      <button class="filter-btn" onclick="setFilter('hard', this)">Сложные</button>
+      <button class="filter-btn" onclick="setFilter('done', this)">Выполненные</button>
+      <button class="filter-btn" onclick="setFilter('undone', this)">Невыполненные</button>
+    </div>
+
+    <div id="tasksRoot"></div>
+  </div>
+
+  <div class="float-counter" id="floatCounter">✅ 0 / 100</div>
+
+  <script>
+    // База данных ответов для всех заданий
+    const ANSWERS = {
+      // Отладка
+      "debug_0": "**DevTools** — набор инструментов разработчика в браузере. Во вкладку **Sources** можно попасть через: F12 → Sources (или Ctrl+Shift+I на Windows, Cmd+Opt+I на Mac). Там отображаются все файлы страницы, можно ставить точки останова и отлаживать код.",
+      "debug_1": "**debugger** — это команда, которая ставит точку останова прямо в коде. Если DevTools открыт, выполнение остановится на этой строке. Полезно, когда нужно быстро остановить код без ручного поиска в панели.",
+      "debug_2": "Кликнуть на номер строки в панели Sources. При остановке выполнения можно навести мышку на переменные, чтобы увидеть их значения, или посмотреть их в панели Scope.",
+      "debug_3": "**Step Over** — выполнить текущую строку и перейти к следующей (не заходя в функции). **Step Into** — зайти внутрь вызываемой функции. **Step Out** — выйти из текущей функции к месту её вызова.",
+      "debug_4": "Навести мышку на переменную или посмотреть в панели **Scope** (справа). Там отображаются локальные, замыкающие и глобальные переменные.",
+      "debug_5": "**Watch** — это панель, куда можно добавить выражения, и они будут вычисляться при каждой остановке. Добавить: нажать + в панели Watch и ввести имя переменной или выражение.",
+      "debug_6": "**Conditional breakpoint** — точка останова, которая срабатывает только при выполнении условия. Поставить: клик правой кнопкой на номер строки → 'Add conditional breakpoint' → ввести условие, например `i > 5`.",
+      "debug_7": "На вкладке Console можно писать JS-код, который выполняется в контексте текущей страницы — есть доступ ко всем переменным и функциям. Можно менять их значения, вызывать функции и сразу видеть результат.",
+      "debug_8": "**Call Stack** — стек вызовов функций. Показывает последовательность вызовов, приведшую к текущей точке остановки. Можно кликнуть на любой вызов, чтобы перейти к соответствующей строке кода.",
+      "debug_9": "**console.table()** выводит массив объектов в виде таблицы. Пример: `console.table([{name: 'John', age: 30}, {name: 'Jane', age: 25}])` — в консоли появится красивая таблица.",
+      "debug_10": "**Logpoint** — точка логирования без остановки кода. Вместо `console.log` можно поставить logpoint в DevTools: правый клик на номер строки → 'Add logpoint' → ввести выражение для вывода. Не нужно менять код и удалять логи потом.",
+      "debug_11": "Для отладки асинхронного кода в DevTools есть флажок **Async** в панели Sources. Если он включён, стек вызовов будет показывать асинхронные операции (setTimeout, промисы, async/await) в правильной последовательности.",
+      "debug_12": "**Blackboxing** — скрытие кода библиотек/фреймворков из стека вызовов. Добавить: настройки DevTools → Blackboxing → добавить регулярное выражение для файлов. Это помогает сосредоточиться на своём коде.",
+      "debug_13": "Вкладка **Performance** записывает активность страницы. **Flame graph** — график, где по оси X время, по Y — стек вызовов. Чем шире блок, тем дольше выполнялась функция. Помогает найти узкие места.",
+      "debug_14": "Вкладка **Memory** → **Heap Snapshot** — снимок памяти. Можно сравнить два снимка до и после действий, чтобы найти объекты, которые не удалились (утечки). Ищите объекты, которые остались в памяти, но уже не нужны.",
+      
+      // Стиль
+      "style_0": "**Code style** — набор правил оформления кода (отступы, пробелы, именование). Единый стиль упрощает чтение кода всей командой, уменьшает конфликты в git и количество ошибок.",
+      "style_1": "**camelCase** — для переменных и функций (firstName). **snake_case** — редко в JS, чаще в Python, БД. **PascalCase** — для классов и компонентов. В JS стандарт: camelCase для всего, кроме классов.",
+      "style_2": "**ESLint** — статический анализатор кода. Проверяет синтаксис, стиль, ищет потенциальные ошибки. Настраивается через конфиг-файл, можно подключать правила AirBnB, Google и т.д.",
+      "style_3": "**Prettier** — форматтер кода. Он автоматически переформатирует код по правилам (длина строки, запятые, кавычки). ESLint ищет ошибки и стиль, а Prettier просто приводит код к единому виду.",
+      "style_4": "Длинные строки сложно читать и сравнивать в diff. Стандарт чаще всего **80-120 символов**. В редакторе включают визуальный маркер, а Prettier автоматически переносит строки.",
+      "style_5": "**EditorConfig** — файл `.editorconfig`, который задаёт базовые настройки редактора (отступы, кодировка).\n```ini\nroot = true\n\n[*]\nindent_style = space\nindent_size = 2\nend_of_line = lf\ncharset = utf-8\ntrim_trailing_whitespace = true\ninsert_final_newline = true\n```",
+      "style_6": "Функция должна делать что-то одно на одном уровне абстракции. Плохо: функция готовит кофе и моет посуду. Хорошо: две функции. Пример: `processOrder()` вызывает `validateOrder()`, `calculateTotal()`, `sendEmail()`.",
+      "style_7": "**Магические числа** — числа без пояснений. Вместо `if (age > 65)` лучше `const RETIREMENT_AGE = 65; if (age > RETIREMENT_AGE)`. Код становится самодокументируемым.",
+      "style_8": "**DRY** — Don't Repeat Yourself. Повторяющийся код выносится в функцию. Пример: вместо трёх похожих запросов к API с разными URL — одна функция с параметром.",
+      "style_9": "**KISS** — Keep It Simple, Stupid. Не усложнять. Если задачу можно решить простым циклом, не надо строить сложную рекурсию с мемоизацией. Простой код легче читать и поддерживать.",
+      "style_10": "Глубокая вложенность усложняет чтение. Уменьшают через **ранний возврат** (early return), вынос логики в функции, использование `Array methods` вместо циклов.",
+      "style_11": "Булевы переменные должны ясно отвечать на вопрос да/нет. Хорошо: `isActive`, `hasError`, `canEdit`. Плохо: `status`, `flag` (непонятно, что означают true/false).",
+      "style_12": "**no-shadow** запрещает переопределение переменных во вложенных областях. Опасно: внешняя переменная становится недоступной, легко ошибиться. Пример: `let x = 1; function f() { let x = 2; }` — x внутри затеняет внешний.",
+      "style_13": "**Early return** — проверка условий в начале функции и выход из неё, чтобы уменьшить вложенность.\n```js\n// Плохо\nfunction process(user) {\n  if (user) {\n    if (user.active) {\n      // долгая логика\n    }\n  }\n}\n\n// Хорошо\nfunction process(user) {\n  if (!user || !user.active) return;\n  // долгая логика\n}\n```",
+      "style_14": "Установка: `npm install eslint prettier husky lint-staged`. Настроить `.eslintrc`, `.prettierrc`. В `package.json` добавить:\n```json\n\"husky\": {\n  \"hooks\": {\n    \"pre-commit\": \"lint-staged\"\n  }\n},\n\"lint-staged\": {\n  \"*.js\": [\"eslint --fix\", \"prettier --write\"]\n}\n```",
+      
+      // Комментарии
+      "comments_0": "`//` — однострочный, действует до конца строки. `/* */` — многострочный, можно писать на нескольких строках. Вложенные многострочные комментарии не работают.",
+      "comments_1": "**JSDoc** — стандарт документирования JS-кода.\n```js\n/**\n * Складывает два числа.\n * @param {number} a - Первое число.\n * @param {number} b - Второе число.\n * @returns {number} Сумма чисел.\n */\nfunction sum(a, b) { return a + b; }\n```",
+      "comments_2": "**@param** — описание параметра функции (тип и имя). **@returns** — описание возвращаемого значения (тип и описание).",
+      "comments_3": "Комментарий **почему** объясняет нетривиальное решение, причину выбора. Комментарий **что** просто пересказывает код — бесполезен, если код и так ясен.",
+      "comments_4": "**TODO** — пометка, что здесь нужно что-то сделать/дописать. Обычно формат: `// TODO: добавить обработку ошибок` или `// FIXME: не работает в IE`.",
+      "comments_5": "Комментировать очевидное — шум. Пример плохо: `// Увеличиваем i на 1\ni++;`. Хорошо: комментарий нужен, когда код сложен, содержит нетривиальный алгоритм или выбрано неочевидное решение.",
+      "comments_6": "**Self-documenting code** — код настолько понятен, что не требует комментариев.\nПлохо:\n```js\nlet d = 86400; // сутки в секундах\n```\nХорошо:\n```js\nconst SECONDS_IN_DAY = 86400;\n```",
+      "comments_7": "Пример JSDoc с тегами:\n```js\n/**\n * @deprecated Используйте newFunction()\n * @throws {TypeError} Если аргумент не число\n * @example\n * oldFunction(5); // 10\n */\n```",
+      "comments_8": "Комментарии на code review объясняют **почему** сделан так, а не иначе. **Commenting contract** — договорённость в команде, какие комментарии обязательны (например, для публичных API).",
+      "comments_9": "Установить JSDoc или TypeDoc. Запустить: `jsdoc файлы.js -d docs`. Будет сгенерирована HTML-документация на основе JSDoc-комментариев.",
+      "comments_10": "**Literate programming** — код пишется как литературное произведение, объяснение важнее кода. В современном мире — это Jupyter Notebooks, где код перемешан с пояснениями. Влияет на практики: писать понятно, комментировать сложные места.",
+      
+      // Ниндзя-код
+      "ninja_0": "**Ниндзя-код** — намеренно запутанный код, который сложно читать и поддерживать. Проблема: тратится время на понимание, легко ошибиться при изменениях, страдает вся команда.",
+      "ninja_1": "Однобуквенные имена не несут смысла. Допустимы: счётчики циклов (`i`, `j`), математические функции (`x`, `y`), в очень коротких функциях. В остальных случаях — плохо.",
+      "ninja_2": "Сокращения типа `brsr` вместо `browser` — антипаттерн. Приходится запоминать или догадываться. Лучше писать полные понятные имена.",
+      "ninja_3": "Если переменная переиспользуется для разных целей, её значение и смысл меняются. Код становится непредсказуемым. Каждая переменная должна иметь одну чёткую цель.",
+      "ninja_4": "Умные однострочники часто сложны для понимания. Пример: `a = b = c = 1;` — непонятно, что хотели сказать. Лучше разделить на понятные строки.",
+      "ninja_5": "Подчёркивание в начале (`_private`) раньше использовали для обозначения приватных полей. Сейчас это не имеет семантики в JS, только договорённость. Бессмысленно, если не используется последовательно.",
+      "ninja_6": "Изменять встроенные прототипы опасно — можно сломать код, который рассчитывает на стандартное поведение. Если два разработчика добавят метод с одним именем, но с разной логикой, будет конфликт.",
+      "ninja_7": "Побочные эффекты в условиях — например, `if (x = 5)` вместо `if (x == 5)`. Присвоение внутри условия меняет переменную и возвращает значение, что часто приводит к ошибкам.",
+      "ninja_8": "Если функция возвращает то число, то строку, то null — вызывающий код должен проверять тип. Лучше возвращать единообразно: всегда число (или null/undefined в особых случаях), или бросать ошибку.",
+      "ninja_9": "Проблемы:\n1) Однобуквенные имена параметров.\n2) Тернарники без скобок — сложно понять порядок.\n3) Нет проверок типов.\n4) Возвращает разные типы.\n5) Непонятно, что делает.\n\nПравильный вариант: осмысленные имена, понятная логика.",
+      "ninja_10": "**Обфускация** — запутывание кода, чтобы его сложно было прочитать человеку. **Минификация** — удаление пробелов, сокращение имён для уменьшения размера. Обфускация оправдана для защиты кода (например, в коммерческом ПО).",
+      
+      // Mocha
+      "mocha_0": "**Автотесты** — программы, проверяющие корректность кода. Нужны: для быстрого поиска ошибок, уверенности при рефакторинге, документации кода.",
+      "mocha_1": "**Mocha** — фреймворк для тестов, гибкий, работает с разными assert-библиотеками. **Jest** — более 'всё в одном' (встроенные assertion, моки, снапшоты), популярен в React-мире.",
+      "mocha_2": "**describe** — блок для группировки тестов. **it** — отдельный тест.\n```js\ndescribe('sum', () => {\n  it('should add two numbers', () => {\n    // тест\n  });\n});\n```",
+      "mocha_3": "**assert.equal** — нестрогое сравнение (==). **assert.strictEqual** — строгое (===). Лучше использовать strictEqual, чтобы избежать неявных приведений типов.",
+      "mocha_4": "**Chai** — библиотека утверждений (assertions). Подключается: `<script src='chai.js'>` или `require('chai')`. Есть три стиля: assert, expect, should.",
+      "mocha_5": "```js\nconst { expect } = require('chai');\nit('sum test', () => {\n  expect(sum(2, 3)).to.equal(5);\n});\n```",
+      "mocha_6": "**BDD** — Behaviour Driven Development. Тесты пишутся на естественном языке: describe('что тестируем'), it('должен делать что-то'), expect(...).to.be.true.",
+      "mocha_7": "Хуки выполняются до/после тестов:\n- **before** — один раз перед всеми тестами.\n- **after** — один раз после.\n- **beforeEach** — перед каждым it.\n- **afterEach** — после каждого it.",
+      "mocha_8": "**TDD** — сначала пишется тест (красный), потом код, чтобы тест прошёл (зелёный), потом рефакторинг. Цикл: Red → Green → Refactor.",
+      "mocha_9": "```js\ndescribe('factorial', () => {\n  it('returns 1 for 0', () => {\n    expect(factorial(0)).to.equal(1);\n  });\n  it('returns 1 for 1', () => {\n    expect(factorial(1)).to.equal(1);\n  });\n  it('throws for negative', () => {\n    expect(() => factorial(-1)).to.throw();\n  });\n});\n```",
+      "mocha_10": "**Test coverage** — процент кода, покрытый тестами. Измеряется инструментами: **nyc** (Istanbul). Запуск: `nyc mocha`. Показывает, какие строки не тестировались.",
+      "mocha_11": "**Stub** — заменяет функцию, возвращая заданные значения. **Mock** — stub с проверкой вызовов. Sinon.js:\n```js\nconst stub = sinon.stub(api, 'get').returns(42);\nconst mock = sinon.mock(obj).expects('method').once();\n```",
+      "mocha_12": "Асинхронность:\n```js\n// Callback\nit('async test', (done) => {\n  asyncFunc(() => { done(); });\n});\n// Promise\nit('async test', () => {\n  return asyncFunc().then(...);\n});\n// async/await\nit('async test', async () => {\n  await asyncFunc();\n});\n```",
+      "mocha_13": "**it.only** — запустить только этот тест (остальные игнорировать). **it.skip** — пропустить тест. Полезно при отладке конкретного теста.",
+      "mocha_14": "```js\nit('throws on non-number', () => {\n  expect(() => func('abc')).to.throw(TypeError);\n});\n```",
+      "mocha_15": "**Test suite** — набор тестов. Обычно группируют по модулям: папка `test` с файлами по структуре проекта. В каждом файле несколько describe.",
+      "mocha_16": "**Snapshot testing** — тест сохраняет результат (снапшот) и при следующем запуске сравнивает с ним. Удобно для UI-компонентов. Недостаток: легко обновить снапшот не глядя, пропустив ошибку.",
+      "mocha_17": "Побочные эффекты изолируют с помощью stub'ов или моков. **Dependency injection** — зависимости передаются в функцию, чтобы в тесте подставить заглушку.\n```js\nfunction fetchData(api) { return api.get(); }\n// в тесте: fetchData({ get: () => mockData })\n```",
+      "mocha_18": "**Property-based testing** — тесты генерируют много случайных данных и проверяют свойства. Fast-check:\n```js\nit('should be idempotent', () => {\n  fc.assert(fc.property(fc.string(), (s) => {\n    return trim(trim(s)) === trim(s);\n  }));\n});\n```",
+      "mocha_19": "GitHub Actions: файл `.github/workflows/test.yml`\n```yaml\nname: Tests\non: [push]\njobs:\n  test:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v2\n      - run: npm ci\n      - run: npm test\n```",
+      
+      // Полифилы
+      "polyfills_0": "**Полифил** — код, реализующий современную функциональность для старых браузеров, где её нет. Например, добавляет метод `Array.includes` в IE.",
+      "polyfills_1": "**Полифил** добавляет недостающую функциональность в глобальный объект. **Транспайлер** (Babel) переписывает современный синтаксис в старый (стрелочные функции → function). Обычно используют вместе.",
+      "polyfills_2": "**Feature detection** — проверка наличия метода перед использованием.\n```js\nif (Array.prototype.includes) {\n  // использовать includes\n} else {\n  // fallback\n}\n```",
+      "polyfills_3": "```js\nif (!Array.prototype.includes) {\n  Array.prototype.includes = function(searchElement, fromIndex) {\n    if (this == null) throw new TypeError();\n    let arr = Object(this);\n    let len = arr.length >>> 0;\n    if (len === 0) return false;\n    let n = fromIndex | 0;\n    let k = Math.max(n >= 0 ? n : len + n, 0);\n    while (k < len) {\n      if (arr[k] === searchElement) return true;\n      k++;\n    }\n    return false;\n  };\n}\n```",
+      "polyfills_4": "**core-js** — библиотека всех полифилов. Подключить: `import 'core-js'` или по отдельности `import 'core-js/features/array/includes'`. Есть также `@babel/polyfill` (устарел).",
+      "polyfills_5": "**@babel/preset-env** автоматически подключает нужные полифилы (через core-js) в зависимости от target browsers. Настраивается `useBuiltIns` и `corejs`.",
+      "polyfills_6": "```js\nif (!Array.prototype.flat) {\n  Array.prototype.flat = function(depth = 1) {\n    return this.reduce((acc, val) => {\n      return acc.concat(Array.isArray(val) && depth > 0 ? val.flat(depth - 1) : val);\n    }, []);\n  };\n}\n```",
+      "polyfills_7": "```js\nif (!Object.assign) {\n  Object.assign = function(target, ...sources) {\n    if (target == null) throw new TypeError();\n    target = Object(target);\n    for (let source of sources) {\n      if (source != null) {\n        for (let key in source) {\n          if (Object.prototype.hasOwnProperty.call(source, key)) {\n            target[key] = source[key];\n          }\n        }\n      }\n    }\n    return target;\n  };\n}\n```",
+      "polyfills_8": "**browserslist** — конфиг, задающий целевые браузеры. Babel и core-js используют его, чтобы подключить только нужные полифилы. Пример: `> 1%, not dead, IE 11`.",
+      "polyfills_9": "Полифил Promise должен реализовать: конструктор, `then`, `catch`, `finally`, `Promise.resolve`, `Promise.reject`, `Promise.all`, `Promise.race`, `Promise.allSettled`. Порядок: сначала основные методы, потом статические.",
+      "polyfills_10": "**useBuiltIns: usage** — Babel анализирует код и подключает только те полифилы, которые реально используются. Это уменьшает размер бандла.",
+      "polyfills_11": "**Шим (shim)** — тоже добавляет функциональность, но часто подменяет API целиком. Полифил — частный случай шима, который реализует стандартное API. Пример: `es5-shim` добавляет ES5 методы в старые браузеры.",
+      "polyfills_12": "```js\nif (!Array.prototype.flatMap) {\n  Array.prototype.flatMap = function(callback, thisArg) {\n    return this.reduce((acc, value, index, array) => {\n      return acc.concat(callback.call(thisArg, value, index, array));\n    }, []);\n  };\n}\n```",
+      "polyfills_13": "```js\n(function(global) {\n  if (typeof global.globalThis === 'undefined') {\n    Object.defineProperty(global, 'globalThis', {\n      get: function() { return global; },\n      configurable: true\n    });\n  }\n})(typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this);\n```",
+      "polyfills_14": "**Scoped polyfill** — полифил, который не затрагивает глобальный объект. Например, можно создать функцию, которая реализует стандартный метод и использовать её напрямую, а не добавлять в прототип. Но тогда это уже не совсем полифил, а утилита.",
+    };
+
+    // ВОТ ОНИ - ВСЕ 100 ЗАДАНИЙ!
+    const TOPICS = [
+      {
+        id: "debug",
+        title: "Отладка в браузере",
+        icon: "🐛",
+        color: "#38bdf8",
+        tasks: [
+          { d: "easy", t: "Что такое DevTools? Как открыть вкладку Sources в Chrome?" },
+          { d: "easy", t: "Что делает оператор <code>debugger</code>? Когда он полезен?" },
+          { d: "easy", t: "Как поставить breakpoint на строку кода в DevTools? Что происходит при остановке?" },
+          { d: "easy", t: "Чем отличаются кнопки Step Over, Step Into и Step Out при пошаговой отладке?" },
+          { d: "easy", t: "Как посмотреть значение переменной при остановке на breakpoint?" },
+          { d: "easy", t: "Что такое Watch-выражения в DevTools? Как добавить переменную в Watch?" },
+          { d: "medium", t: "Что такое conditional breakpoint? Как поставить breakpoint срабатывающий только при <code>i > 5</code>?" },
+          { d: "medium", t: "Как использовать вкладку Console для выполнения JS-кода в контексте страницы?" },
+          { d: "medium", t: "Что такое Call Stack в DevTools? Как по нему понять последовательность вызовов?" },
+          { d: "medium", t: "Как использовать <code>console.table()</code> для удобного вывода массива объектов?" },
+          { d: "medium", t: "Что такое logpoint в DevTools? Чем он лучше временного <code>console.log</code>?" },
+          { d: "medium", t: "Как отлаживать асинхронный код (async/await) в DevTools? Где смотреть асинхронный стек?" },
+          { d: "hard", t: "Что такое blackboxing в DevTools? Как добавить библиотеку в blackbox и зачем?" },
+          { d: "hard", t: "Как использовать Performance-вкладку для поиска медленных функций? Что такое flame graph?" },
+          { d: "hard", t: "Как отладить утечку памяти с помощью Memory-вкладки DevTools? Что такое Heap Snapshot?" },
+        ],
+      },
+      {
+        id: "style",
+        title: "Советы по стилю кода",
+        icon: "✨",
+        color: "#f97316",
+        tasks: [
+          { d: "easy", t: "Что такое code style? Зачем нужны единые соглашения в команде?" },
+          { d: "easy", t: "Чем отличается camelCase от snake_case и PascalCase? Когда применяется каждый в JS?" },
+          { d: "easy", t: "Что такое ESLint? Как он помогает соблюдать стиль кода?" },
+          { d: "easy", t: "Что такое Prettier? Чем он отличается от ESLint?" },
+          { d: "easy", t: "Почему важно ограничивать длину строки кода? Какой стандарт чаще всего используют?" },
+          { d: "easy", t: "Что такое EditorConfig? Напиши минимальный <code>.editorconfig</code> для JS-проекта." },
+          { d: "medium", t: 'Что такое принцип "один уровень абстракции на функцию"? Приведи пример нарушения и исправления.' },
+          { d: "medium", t: 'Что такое "магические числа" (magic numbers) в коде? Как от них избавиться?' },
+          { d: "medium", t: "Что такое принцип DRY (Don't Repeat Yourself)? Приведи пример его применения." },
+          { d: "medium", t: "Что такое принцип KISS (Keep It Simple, Stupid)? Как он влияет на написание функций?" },
+          { d: "medium", t: "Почему глубокая вложенность кода — это проблема? Как её уменьшить?" },
+          { d: "medium", t: "Как правильно именовать булевы переменные? Приведи примеры хороших и плохих имён." },
+          { d: "hard", t: "Что такое линтер-правило <code>no-shadow</code>? Почему shadowing переменных опасен?" },
+          { d: "hard", t: 'Что такое принцип "early return" и как он улучшает читаемость функций? Напиши пример рефакторинга.' },
+          { d: "hard", t: "Как настроить ESLint + Prettier + husky + lint-staged для автоматической проверки кода перед коммитом?" },
+        ],
+      },
+      {
+        id: "comments",
+        title: "Комментарии",
+        icon: "💬",
+        color: "#c084fc",
+        tasks: [
+          { d: "easy", t: "Чем однострочный комментарий <code>//</code> отличается от многострочного <code>/* */</code>?" },
+          { d: "easy", t: "Что такое JSDoc? Напиши JSDoc-комментарий для функции <code>sum(a, b)</code>." },
+          { d: "easy", t: "Что означают теги <code>@param</code> и <code>@returns</code> в JSDoc?" },
+          { d: "easy", t: 'Когда комментарий "почему" важнее комментария "что"? Приведи пример.' },
+          { d: "easy", t: "Что такое TODO-комментарий? Как принято их форматировать?" },
+          { d: "medium", t: "Почему комментирование очевидного кода считается плохой практикой? Приведи пример." },
+          { d: "medium", t: 'Что такое "self-documenting code"? Перепиши плохо именованный код с комментариями в читаемый без них.' },
+          { d: "medium", t: "Что такое теги <code>@deprecated</code>, <code>@throws</code>, <code>@example</code> в JSDoc? Напиши пример их использования." },
+          { d: "medium", t: 'Как комментарии помогают при code review? Что такое "commenting contract"?' },
+          { d: "hard", t: "Как настроить автогенерацию документации из JSDoc-комментариев (например через JSDoc 3 или TypeDoc)?" },
+          { d: "hard", t: 'Что такое "literate programming"? Как идея влияет на современные практики написания комментариев?' },
+        ],
+      },
+      {
+        id: "ninja",
+        title: "Ниндзя-код",
+        icon: "🥷",
+        color: "#ef4444",
+        tasks: [
+          { d: "easy", t: 'Что такое "ниндзя-код"? Почему намеренно запутанный код — это проблема для команды?' },
+          { d: "easy", t: "Что плохого в однобуквенных именах переменных вроде <code>x</code>, <code>t</code>, <code>d</code>? Когда они допустимы?" },
+          { d: "easy", t: "Что такое сокращение имён переменных как анти-паттерн? Приведи пример <code>brsr</code> вместо <code>browser</code>." },
+          { d: "easy", t: "Почему переиспользование одной переменной для разных целей — плохая практика?" },
+          { d: "easy", t: 'Что такое "умные" однострочники? Почему краткость не всегда = качество?' },
+          { d: "medium", t: 'Что такое "подчёркивание ради подчёркивания"? Когда префикс <code>_</code> несёт смысл, а когда нет?' },
+          { d: "medium", t: "Почему добавление новых свойств к встроенным прототипам (<code>Array.prototype.myMethod</code>) опасно?" },
+          { d: "medium", t: 'Что такое "побочные эффекты в условиях" как ниндзя-трюк? Приведи пример и объясни проблему.' },
+          { d: "medium", t: "Почему возврат разных типов из одной функции — это ниндзя-приём? Что следует делать вместо этого?" },
+          { d: "hard", t: 'Найди и объясни все "ниндзя-проблемы" в коде:\n<code>function f(a,b,c,d){return a?b?c:d:b}</code>' },
+          { d: "hard", t: 'Что такое "обфускация" кода? Чем она отличается от минификации? Когда обфускация оправдана?' },
+        ],
+      },
+      {
+        id: "mocha",
+        title: "Автотестирование с Mocha",
+        icon: "☕",
+        color: "#4ade80",
+        tasks: [
+          { d: "easy", t: "Что такое автоматическое тестирование? Зачем оно нужно?" },
+          { d: "easy", t: "Что такое Mocha? Чем он отличается от Jest?" },
+          { d: "easy", t: "Что такое <code>describe</code> и <code>it</code> в Mocha? Напиши минимальный тест." },
+          { d: "easy", t: "Что такое <code>assert.equal</code> и <code>assert.strictEqual</code>? В чём разница?" },
+          { d: "easy", t: "Что такое библиотека Chai? Как подключить её к Mocha?" },
+          { d: "easy", t: "Напиши тест для функции <code>sum(a, b)</code> используя <code>expect(sum(2,3)).to.equal(5)</code>." },
+          { d: "easy", t: "Что такое BDD-стиль тестирования? Что означает <code>describe / it / expect</code>?" },
+          { d: "easy", t: "Что такое <code>before</code>, <code>after</code>, <code>beforeEach</code>, <code>afterEach</code> хуки в Mocha?" },
+          { d: "medium", t: "Что такое TDD (Test Driven Development)? Опиши цикл Red → Green → Refactor." },
+          { d: "medium", t: "Напиши набор тестов для функции <code>factorial(n)</code> покрывающий edge cases: 0, 1, отрицательное." },
+          { d: "medium", t: "Что такое test coverage? Как измерить покрытие кода тестами (например через nyc/istanbul)?" },
+          { d: "medium", t: "Что такое stub и mock? Чем они отличаются? Приведи пример с Sinon.js." },
+          { d: "medium", t: "Как тестировать асинхронный код в Mocha? Покажи вариант с callback и с Promise." },
+          { d: "medium", t: "Что такое <code>it.only</code> и <code>it.skip</code>? Когда их применяют?" },
+          { d: "medium", t: "Напиши тест проверяющий что функция бросает ошибку при неверном аргументе." },
+          { d: "medium", t: "Что такое test suite? Как организовать тесты в файлы и папки для большого проекта?" },
+          { d: "hard", t: "Что такое snapshot testing? Как оно работает и в чём его ограничения?" },
+          { d: "hard", t: "Как тестировать функции с побочными эффектами (запросы к API, запись в БД)? Что такое dependency injection в контексте тестов?" },
+          { d: "hard", t: "Что такое property-based testing? Как использовать fast-check с Mocha для генерации тестовых данных?" },
+          { d: "hard", t: "Как настроить CI/CD pipeline (например GitHub Actions) для автоматического запуска Mocha-тестов на каждый push?" },
+        ],
+      },
+      {
+        id: "polyfills",
+        title: "Полифилы",
+        icon: "🔧",
+        color: "#facc15",
+        tasks: [
+          { d: "easy", t: "Что такое полифил (polyfill)? Зачем он нужен?" },
+          { d: "easy", t: "Чем полифил отличается от транспайлера (например Babel)?" },
+          { d: "easy", t: "Что такое feature detection? Как проверить поддерживает ли браузер метод перед его использованием?" },
+          { d: "easy", t: "Напиши полифил для <code>Array.prototype.includes</code>." },
+          { d: "easy", t: "Что такое core-js? Как подключить нужные полифилы через него?" },
+          { d: "easy", t: "Что такое <code>@babel/preset-env</code> и как он связан с полифилами?" },
+          { d: "medium", t: "Напиши полифил для <code>Array.prototype.flat</code> (один уровень вложенности)." },
+          { d: "medium", t: "Напиши полифил для <code>Object.assign</code>." },
+          { d: "medium", t: "Что такое <code>browserslist</code>? Как он используется вместе с Babel и core-js для выбора нужных полифилов?" },
+          { d: "medium", t: "Напиши полифил для <code>Promise</code> — опиши какие методы нужно реализовать и в каком порядке." },
+          { d: "medium", t: 'Что такое "useBuiltIns: usage" в Babel? Как это влияет на автоматическое добавление полифилов?' },
+          { d: "medium", t: "Чем полифил отличается от шима (shim)? Приведи пример каждого." },
+          { d: "hard", t: "Напиши полифил для <code>Array.prototype.flatMap</code>." },
+          { d: "hard", t: "Напиши полифил для <code>globalThis</code> работающий в браузере, Node.js и Web Worker." },
+          { d: "hard", t: 'Как правильно добавить полифил не загрязняя глобальный скоп? Что такое "scoped polyfill"?' },
+        ],
+      },
+    ];
+
+    const STORAGE_KEY = "jsTasks4_done";
+    let done = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    let currentFilter = "all";
+    let searchQuery = "";
+    const TOTAL = 100;
+
+    function formatAnswer(text) {
+      if (!text) return '<p>Ответ готовится...</p>';
+      let formatted = text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/```js\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+        .replace(/```ini\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+        .replace(/```json\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+        .replace(/```yaml\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\n/g, '<br>');
+      return `<p>${formatted}</p>`;
+    }
+
+    function toggleAnswer(card, id) {
+      let answerDiv = card.querySelector('.answer-block');
+      if (!answerDiv) {
+        answerDiv = document.createElement('div');
+        answerDiv.className = 'answer-block';
+        const answerText = ANSWERS[id] || 'Ответ готовится...';
+        answerDiv.innerHTML = formatAnswer(answerText);
+        card.appendChild(answerDiv);
+      }
+      answerDiv.classList.toggle('show');
+    }
+
+    function renderAll() {
+      const root = document.getElementById("tasksRoot");
+      root.innerHTML = "";
+
+      let easy = 0, med = 0, hard = 0;
+      TOPICS.forEach(t => 
+        t.tasks.forEach(tk => {
+          if (tk.d === "easy") easy++;
+          else if (tk.d === "medium") med++;
+          else hard++;
+        })
+      );
+      document.getElementById("easyCount").textContent = easy;
+      document.getElementById("medCount").textContent = med;
+      document.getElementById("hardCount").textContent = hard;
+
+      let num = 0;
+      TOPICS.forEach((topic) => {
+        const sec = document.createElement("section");
+        sec.className = "topic-section";
+
+        const hdr = document.createElement("div");
+        hdr.className = "topic-header";
+        hdr.innerHTML = `
+          <div class="topic-icon" style="background:${topic.color}1a;color:${topic.color}">${topic.icon}</div>
+          <span class="topic-title">${topic.title}</span>
+          <div class="topic-meta">
+            <span class="topic-count">${topic.tasks.length} заданий</span>
+          </div>
+        `;
+        sec.appendChild(hdr);
+
+        const grid = document.createElement("div");
+        grid.className = "task-grid";
+
+        topic.tasks.forEach((task, i) => {
+          num++;
+          const id = `${topic.id}_${i}`;
+          const isDone = !!done[id];
+
+          const card = document.createElement("div");
+          card.className = "task-card" + (isDone ? " done" : "");
+          card.style.setProperty("--card-color", topic.color);
+          card.style.setProperty("--card-glow", `${topic.color}0f`);
+          card.dataset.diff = task.d;
+          card.dataset.done = isDone ? "1" : "0";
+          card.dataset.text = task.t.replace(/<[^>]+>/g, "").toLowerCase();
+          card.dataset.id = id;
+
+          const labels = { easy: "Лёгкое", medium: "Среднее", hard: "Сложное" };
+          const classes = { easy: "diff-easy", medium: "diff-medium", hard: "diff-hard" };
+
+          card.innerHTML = `
+            <div class="task-top">
+              <span class="task-num">#${String(num).padStart(3, "0")}</span>
+              <span class="difficulty ${classes[task.d]}">${labels[task.d]}</span>
+            </div>
+            <div class="task-text">${task.t}</div>
+            ${task.code ? `<div class="code-block">${task.code}</div>` : ""}
+            <div class="task-actions">
+              <button class="btn-done" onclick="event.stopPropagation(); toggleDone('${id}', this)">
+                ${isDone ? "✅ Сделано" : "○ Выполнено"}
+              </button>
+            </div>
+          `;
+
+          card.addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn-done')) return;
+            toggleAnswer(card, id);
+          });
+
+          grid.appendChild(card);
+        });
+
+        sec.appendChild(grid);
+        root.appendChild(sec);
+      });
+
+      updateProgress();
+      applyFilter();
+    }
+
+    function toggleDone(id, btn) {
+      done[id] = !done[id];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(done));
+      const card = btn.closest(".task-card");
+      card.classList.toggle("done", done[id]);
+      card.dataset.done = done[id] ? "1" : "0";
+      btn.innerHTML = done[id] ? "✅ Сделано" : "○ Выполнено";
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const cnt = Object.values(done).filter(Boolean).length;
+      const pct = ((cnt / TOTAL) * 100).toFixed(1);
+      document.getElementById("progressBar").style.width = pct + "%";
+      document.getElementById("progressText").textContent = `${cnt} / ${TOTAL}`;
+      document.getElementById("floatCounter").textContent = `✅ ${cnt} / ${TOTAL}`;
+    }
+
+    function setFilter(f, btn) {
+      currentFilter = f;
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      applyFilter();
+    }
+
+    function filterTasks() {
+      searchQuery = document.getElementById("searchInput").value.toLowerCase();
+      applyFilter();
+    }
+
+    function applyFilter() {
+      document.querySelectorAll(".task-card").forEach((card) => {
+        let show = true;
+        const d = card.dataset.diff;
+        const dn = card.dataset.done === "1";
+        if (currentFilter === "easy") show = d === "easy";
+        else if (currentFilter === "medium") show = d === "medium";
+        else if (currentFilter === "hard") show = d === "hard";
+        else if (currentFilter === "done") show = dn;
+        else if (currentFilter === "undone") show = !dn;
+        if (searchQuery && !card.dataset.text.includes(searchQuery)) show = false;
+        card.classList.toggle("hidden", !show);
+      });
+
+      document.querySelectorAll(".topic-section").forEach((sec) => {
+        const vis = [...sec.querySelectorAll(".task-card")].some(c => !c.classList.contains("hidden"));
+        sec.classList.toggle("hidden", !vis);
+      });
+    }
+
+    function resetAll() {
+      if (confirm("Сбросить весь прогресс?")) {
+        done = {};
+        localStorage.removeItem(STORAGE_KEY);
+        renderAll();
+      }
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>
