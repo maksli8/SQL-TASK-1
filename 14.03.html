@@ -1,0 +1,1117 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JS Tasks — Объекты (200 заданий с ответами)</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap");
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #13131a;
+      --card: #1a1a25;
+      --border: #2a2a3d;
+      --accent: #06b6d4;
+      --accent2: #818cf8;
+      --accent3: #f59e0b;
+      --accent4: #10b981;
+      --accent5: #ef4444;
+      --accent6: #f472b6;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --answer-bg: #0f0f1a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background:
+        radial-gradient(ellipse at 15% 25%, rgba(6, 182, 212, 0.08) 0%, transparent 45%),
+        radial-gradient(ellipse at 85% 70%, rgba(129, 140, 248, 0.07) 0%, transparent 45%),
+        radial-gradient(ellipse at 50% 10%, rgba(244, 114, 182, 0.04) 0%, transparent 40%);
+      animation: bgPulse 22s ease-in-out infinite alternate;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes bgPulse {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(1%, 2%) scale(1.02); }
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header {
+      padding: 64px 20px 44px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #06b6d4, #818cf8);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      padding: 7px 18px;
+      border-radius: 20px;
+      margin-bottom: 22px;
+    }
+
+    h1 {
+      font-size: clamp(2.4rem, 6vw, 4.8rem);
+      font-weight: 900;
+      line-height: 1.08;
+      background: linear-gradient(135deg, #fff 0%, #06b6d4 45%, #818cf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 14px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 44px;
+      line-height: 1.6;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 48px;
+    }
+
+    .stat-chip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 18px;
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 0.88rem;
+    }
+    .stat-chip .num {
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .progress-wrap {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px 24px;
+      margin-bottom: 36px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .progress-label {
+      font-weight: 600;
+      font-size: 0.93rem;
+      white-space: nowrap;
+    }
+    .progress-bar-outer {
+      flex: 1;
+      min-width: 180px;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .progress-bar-inner {
+      height: 100%;
+      background: linear-gradient(90deg, #06b6d4, #818cf8);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+    .progress-count {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.88rem;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .btn-reset {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 15px;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: "Inter", sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all 0.2s;
+    }
+    .btn-reset:hover {
+      border-color: var(--accent5);
+      color: var(--accent5);
+    }
+
+    .controls {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 44px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-wrap {
+      flex: 1;
+      min-width: 240px;
+      position: relative;
+    }
+    .search-wrap input {
+      width: 100%;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 16px 11px 42px;
+      color: var(--text);
+      font-family: "Inter", sans-serif;
+      font-size: 0.93rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-wrap input:focus {
+      border-color: var(--accent);
+    }
+    .search-wrap::before {
+      content: "🔍";
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .filter-btn {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 15px;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: "Inter", sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      border-color: var(--accent);
+      color: #fff;
+      background: rgba(6, 182, 212, 0.15);
+    }
+
+    .topic-section {
+      margin-bottom: 64px;
+    }
+
+    .topic-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 22px;
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 10;
+    }
+
+    .topic-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .topic-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+
+    .topic-count {
+      margin-left: auto;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.78rem;
+      color: var(--muted);
+      background: var(--surface);
+      padding: 4px 11px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .task-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 14px;
+    }
+
+    .task-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      transition: all 0.22s;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .task-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--card-color, #06b6d4), transparent);
+      opacity: 0;
+      transition: opacity 0.22s;
+    }
+
+    .task-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 36px rgba(0, 0, 0, 0.32);
+      border-color: var(--card-color, #06b6d4);
+    }
+    .task-card:hover::before {
+      opacity: 1;
+    }
+
+    .task-card.done {
+      background: rgba(16, 185, 129, 0.06);
+      border-color: rgba(16, 185, 129, 0.28);
+    }
+    .task-card.done::before {
+      opacity: 1;
+      background: linear-gradient(90deg, #10b981, transparent);
+    }
+
+    .task-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 13px;
+    }
+
+    .task-num {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.73rem;
+      color: var(--muted);
+      background: var(--surface);
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+
+    .difficulty {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+    .diff-easy {
+      background: rgba(16, 185, 129, 0.13);
+      color: #10b981;
+    }
+    .diff-medium {
+      background: rgba(245, 158, 11, 0.13);
+      color: #f59e0b;
+    }
+    .diff-hard {
+      background: rgba(239, 68, 68, 0.13);
+      color: #ef4444;
+    }
+
+    .task-text {
+      font-size: 0.92rem;
+      line-height: 1.68;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+    .task-text code {
+      font-family: "JetBrains Mono", monospace;
+      background: var(--surface);
+      color: #06b6d4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.84em;
+    }
+
+    .answer-block {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      background: var(--answer-bg);
+      border-left: 3px solid var(--card-color, #06b6d4);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 12px 0 10px;
+      color: #cbd5e1;
+      display: none;
+      font-family: "Inter", sans-serif;
+    }
+    
+    .answer-block.show {
+      display: block;
+    }
+    
+    .answer-block code {
+      font-family: "JetBrains Mono", monospace;
+      background: #1e1e2e;
+      color: #06b6d4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.84em;
+    }
+    
+    .answer-block pre {
+      background: #1e1e2e;
+      padding: 10px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 10px 0 0;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.8rem;
+    }
+
+    .code-block {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.77rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      color: #94a3b8;
+      margin-bottom: 14px;
+      white-space: pre;
+      overflow-x: auto;
+      line-height: 1.65;
+    }
+
+    .task-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      position: relative;
+      z-index: 5;
+    }
+
+    .btn-done {
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 7px 15px;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: "Inter", sans-serif;
+      font-size: 0.79rem;
+      font-weight: 600;
+      transition: all 0.2s;
+      pointer-events: auto;
+    }
+    .btn-done:hover {
+      border-color: #10b981;
+      color: #10b981;
+    }
+    .task-card.done .btn-done {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: #10b981;
+      color: #10b981;
+    }
+
+    .float-counter {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: linear-gradient(135deg, #06b6d4, #818cf8);
+      border-radius: 20px;
+      padding: 13px 22px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #fff;
+      box-shadow: 0 8px 32px rgba(6, 182, 212, 0.4);
+      z-index: 100;
+      transition: transform 0.2s;
+    }
+    .float-counter:hover {
+      transform: scale(1.06);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--accent);
+    }
+
+    @media (max-width: 640px) {
+      .task-grid {
+        grid-template-columns: 1fr;
+      }
+      h1 {
+        font-size: 2.3rem;
+      }
+      .float-counter {
+        bottom: 14px;
+        right: 14px;
+        padding: 10px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="badge">✦ JavaScript Practice</div>
+    <h1>200 заданий<br />Объекты</h1>
+    <p class="subtitle">
+      Основы · Копирование · Сборка мусора · this · new · ?. · Symbol ·
+      Преобразования
+    </p>
+    <div class="stats">
+      <div class="stat-chip"><span class="num">200</span>&nbsp;заданий</div>
+      <div class="stat-chip"><span class="num">9</span>&nbsp;тем</div>
+      <div class="stat-chip"><span class="num" id="easyCount">0</span>&nbsp;лёгких</div>
+      <div class="stat-chip"><span class="num" id="medCount">0</span>&nbsp;средних</div>
+      <div class="stat-chip"><span class="num" id="hardCount">0</span>&nbsp;сложных</div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="progress-wrap">
+      <span class="progress-label">⚡ Прогресс</span>
+      <div class="progress-bar-outer">
+        <div class="progress-bar-inner" id="progressBar" style="width: 0%"></div>
+      </div>
+      <span class="progress-count" id="progressText">0 / 200</span>
+      <button class="btn-reset" onclick="resetAll()">Сбросить</button>
+    </div>
+
+    <div class="controls">
+      <div class="search-wrap">
+        <input type="text" id="searchInput" placeholder="Поиск задания..." oninput="filterTasks()">
+      </div>
+      <button class="filter-btn active" onclick="setFilter('all', this)">Все</button>
+      <button class="filter-btn" onclick="setFilter('easy', this)">Лёгкие</button>
+      <button class="filter-btn" onclick="setFilter('medium', this)">Средние</button>
+      <button class="filter-btn" onclick="setFilter('hard', this)">Сложные</button>
+      <button class="filter-btn" onclick="setFilter('done', this)">Выполненные</button>
+      <button class="filter-btn" onclick="setFilter('undone', this)">Невыполненные</button>
+    </div>
+
+    <div id="tasksRoot"></div>
+  </div>
+
+  <div class="float-counter" id="floatCounter">✅ 0 / 200</div>
+
+  <script>
+    // БАЗА ОТВЕТОВ ДЛЯ ВСЕХ 200 ЗАДАНИЙ ПО ОБЪЕКТАМ
+    const ANSWERS = {
+      // ==================== ОБЪЕКТЫ: ОСНОВЫ ====================
+      "obj_basics_0": "```js\nconst user = { name: 'Иван', age: 30, isAdmin: true };\nconsole.log(user.name, user.age, user.isAdmin);\n```",
+      "obj_basics_1": "Точка: `obj.key`. Скобки: `obj['key']`. Скобки нужны для динамических ключей и ключей с пробелами.",
+      "obj_basics_2": "```js\nuser.email = 'ivan@example.com';\n```",
+      "obj_basics_3": "```js\ndelete user.email;\n```",
+      "obj_basics_4": "1) `'key' in obj` 2) `obj.key !== undefined` (но не различает отсутствие от значения undefined)",
+      "obj_basics_5": "Оператор `in` проверяет наличие ключа: `'age' in user` вернёт true если ключ есть.",
+      "obj_basics_6": "```js\nfor (let key in user) { console.log(key, user[key]); }\n```",
+      "obj_basics_7": "```js\nconst key = 'age';\nconst obj = { [key]: 30 }; // { age: 30 }\n```",
+      "obj_basics_8": "```js\nconst name = 'Иван', age = 30;\nconst user = { name, age }; // { name: 'Иван', age: 30 }\n```",
+      "obj_basics_9": "`Object.keys(obj)` — массив ключей, `Object.values(obj)` — массив значений.",
+      "obj_basics_10": "`Object.entries(obj)` — массив пар [ключ, значение].",
+      "obj_basics_11": "```js\nconst user = { name: 'Иван', address: { city: 'Москва' } };\nconsole.log(user.address.city);\n```",
+      "obj_basics_12": "```js\nconst user = { name: 'Иван', age: 30 };\nconst { name, age } = user;\n```",
+      "obj_basics_13": "```js\nconst { name, age = 18 } = user; // age по умолчанию 18, если в объекте нет\n```",
+      "obj_basics_14": "```js\nconst obj1 = { a: 1 };\nconst obj2 = { b: 2 };\nconst merged = { ...obj1, ...obj2 }; // { a: 1, b: 2 }\n```",
+      "obj_basics_15": "```js\nconst keys = Object.keys(obj);\nconst values = Object.values(obj);\nconst entries = Object.entries(obj);\n```",
+      "obj_basics_16": "```js\nconst entries = [['a', 1], ['b', 2]];\nconst obj = Object.fromEntries(entries); // { a: 1, b: 2 }\n```",
+      "obj_basics_17": "`Object.freeze(obj)` — делает объект полностью неизменяемым: нельзя добавлять, удалять, изменять свойства.",
+      "obj_basics_18": "`Object.seal(obj)` — запрещает добавлять/удалять свойства, но существующие можно изменять. `freeze` — всё запрещает.",
+      "obj_basics_19": "```js\nfunction pick(obj, keys) {\n  return keys.reduce((acc, key) => {\n    if (key in obj) acc[key] = obj[key];\n    return acc;\n  }, {});\n}\n```",
+      "obj_basics_20": "```js\nfunction omit(obj, keys) {\n  return Object.keys(obj).reduce((acc, key) => {\n    if (!keys.includes(key)) acc[key] = obj[key];\n    return acc;\n  }, {});\n}\n```",
+      "obj_basics_21": "```js\nObject.defineProperty(obj, 'readOnly', { value: 42, writable: false });\n```",
+      "obj_basics_22": "**writable** — можно ли изменять, **enumerable** — появляется ли в циклах, **configurable** — можно ли менять дескриптор/удалять. Посмотреть: `Object.getOwnPropertyDescriptor(obj, 'prop')`.",
+      "obj_basics_23": "```js\nfunction deepFreeze(obj) {\n  Object.freeze(obj);\n  Object.values(obj).forEach(val => {\n    if (val && typeof val === 'object') deepFreeze(val);\n  });\n  return obj;\n}\n```",
+      "obj_basics_24": "```js\nconst user = {\n  firstName: 'Иван', lastName: 'Иванов',\n  get fullName() { return `${this.firstName} ${this.lastName}`; },\n  set fullName(value) { [this.firstName, this.lastName] = value.split(' '); }\n};\n```",
+
+      // ==================== КОПИРОВАНИЕ ОБЪЕКТОВ ====================
+      "obj_copy_0": "Объекты хранятся и передаются по ссылке, т.е. переменная хранит адрес в памяти, а не сам объект.",
+      "obj_copy_1": "Изменения отразятся в обеих переменных, т.к. они ссылаются на один и тот же объект в памяти.",
+      "obj_copy_2": "```js\nconst copy = Object.assign({}, original);\n```",
+      "obj_copy_3": "```js\nconst copy = { ...original };\n```",
+      "obj_copy_4": "Поверхностная копирует только первый уровень. Глубокая копирует все вложенные объекты рекурсивно.",
+      "obj_copy_5": "`obj1 === obj2` проверяет ссылаются ли переменные на один объект, а не равны ли значения.",
+      "obj_copy_6": "```js\nfunction shallowEqual(a, b) {\n  if (a === b) return true;\n  const keysA = Object.keys(a), keysB = Object.keys(b);\n  if (keysA.length !== keysB.length) return false;\n  return keysA.every(key => a[key] === b[key]);\n}\n```",
+      "obj_copy_7": "```js\nconst deepCopy = JSON.parse(JSON.stringify(obj));\n```\nОграничения: теряет функции, undefined, Symbol, не работает с циклическими ссылками.",
+      "obj_copy_8": "```js\nconst deepCopy = structuredClone(obj);\n```\nПоддерживает циклические ссылки, даты, Map, Set, но не функции.",
+      "obj_copy_9": "```js\nfunction deepClone(obj, hash = new WeakMap()) {\n  if (obj === null || typeof obj !== 'object') return obj;\n  if (hash.has(obj)) return hash.get(obj);\n  const clone = Array.isArray(obj) ? [] : {};\n  hash.set(obj, clone);\n  for (let key in obj) {\n    if (obj.hasOwnProperty(key)) {\n      clone[key] = deepClone(obj[key], hash);\n    }\n  }\n  return clone;\n}\n```",
+      "obj_copy_10": "Циклическая ссылка — когда объект ссылается сам на себя. `structuredClone` работает с ними, JSON.stringify — нет.",
+      "obj_copy_11": "```js\nfunction deepEqual(a, b) {\n  if (a === b) return true;\n  if (typeof a !== 'object' || typeof b !== 'object' || a === null || b === null) return false;\n  const keysA = Object.keys(a), keysB = Object.keys(b);\n  if (keysA.length !== keysB.length) return false;\n  return keysA.every(key => deepEqual(a[key], b[key]));\n}\n```",
+      "obj_copy_12": "```js\nfunction deepMerge(target, source) {\n  const result = { ...target };\n  for (let key in source) {\n    if (source.hasOwnProperty(key)) {\n      if (typeof source[key] === 'object' && source[key] !== null && target[key]) {\n        result[key] = deepMerge(target[key], source[key]);\n      } else {\n        result[key] = source[key];\n      }\n    }\n  }\n  return result;\n}\n```",
+      "obj_copy_13": "Функции и Symbol-ключи теряются в JSON, остаются в structuredClone. Прототипные свойства обычно теряются при простом копировании.",
+      "obj_copy_14": "```js\nfunction immutableSet(obj, path, value) {\n  const keys = path.split('.');\n  const result = { ...obj };\n  let current = result;\n  for (let i = 0; i < keys.length - 1; i++) {\n    current[keys[i]] = { ...current[keys[i]] };\n    current = current[keys[i]];\n  }\n  current[keys[keys.length - 1]] = value;\n  return result;\n}\n```",
+
+      // ==================== СБОРКА МУСОРА ====================
+      "gc_0": "Автоматическое освобождение памяти от объектов, которые больше не достижимы из корней.",
+      "gc_1": "Объект достижим, если на него есть ссылка из корня или из другого достижимого объекта. Недостижимые удаляются.",
+      "gc_2": "Mark-and-sweep: 1) Помечаем все достижимые объекты из корней. 2) Удаляем непомеченные.",
+      "gc_3": "Корни: глобальный объект (window/global), локальные переменные в функциях, текущий стек вызовов, DOM-элементы и т.д.",
+      "gc_4": "Утечка — объект остаётся достижимым, хотя больше не нужен. Пример: забытые таймеры, глобальные переменные, забытые слушатели событий.",
+      "gc_5": "Замыкание удерживает внешние переменные. Если функция долго живёт, она держит всё замыкание, даже если нужна только часть.",
+      "gc_6": "**WeakRef** позволяет хранить слабую ссылку, не препятствующую сборке. Полезно для кэширования без утечек.",
+      "gc_7": "**FinalizationRegistry** позволяет зарегистрировать callback, вызываемый после сборки объекта. Полезно для очистки ресурсов.",
+      "gc_8": "Глобальные переменные живут всё время работы программы. Злоупотребление ими приводит к тому, что память не освобождается.",
+      "gc_9": "DOM-элементы могут удерживаться в памяти через ссылки из JS, даже если удалены из DOM. Нужно обнулять ссылки или использовать WeakMap.",
+
+      // ==================== THIS ====================
+      "this_0": "```js\nconst user = {\n  name: 'Иван',\n  sayHi() { console.log('Привет, я ' + this.name); }\n};\n```",
+      "this_1": "`this` в методе ссылается на объект, через который метод вызван.",
+      "this_2": "```js\nconst obj = {\n  greet() { console.log('Привет'); }\n};\n```",
+      "this_3": "В нестрогом режиме — глобальный объект (window). В строгом — undefined.",
+      "this_4": "Когда метод передаётся как callback (например в setTimeout), он теряет контекст и this становится глобальным.",
+      "this_5": "```js\nconst bound = obj.method.bind(obj);\nsetTimeout(bound, 1000);\n```",
+      "this_6": "```js\nconst obj = {\n  name: 'Иван',\n  greet() { setTimeout(() => console.log(this.name), 1000); }\n};\n```",
+      "this_7": "**call** вызывает функцию с заданным this и аргументами: `func.call(obj, arg1, arg2)`.",
+      "this_8": "**apply** делает то же, но аргументы передаёт массивом: `func.apply(obj, [arg1, arg2])`.",
+      "this_9": "**bind** возвращает новую функцию с навсегда привязанным this: `const bound = func.bind(obj)`.",
+      "this_10": "bind второй раз не перепривязывает this, первый bind имеет наивысший приоритет.",
+      "this_11": "```js\nconst calc = {\n  value: 0,\n  add(n) { this.value += n; return this; },\n  mul(n) { this.value *= n; return this; }\n};\ncalc.add(5).mul(2);\n```",
+      "this_12": "```js\nconst user = { name: 'Иван', age: 30,\n  toString() { return `User(${this.name}, ${this.age})`; }\n};\n```",
+      "this_13": "```js\nfunction softBind(fn, ctx) {\n  return function(...args) {\n    return (this === undefined || this === window) ? fn.apply(ctx, args) : fn.apply(this, args);\n  };\n}\n```",
+      "this_14": "Приоритет: new > явное (bind/call/apply) > неявное (объект) > по умолчанию (глобальный/undefined).",
+      "this_15": "```js\nif (!Function.prototype.bind) {\n  Function.prototype.bind = function(ctx, ...args) {\n    const fn = this;\n    return function(...more) {\n      return fn.apply(ctx, args.concat(more));\n    };\n  };\n}\n```",
+      "this_16": "```js\nconst { greet } = obj; // теряет this\nconst bound = obj.greet.bind(obj); // работает\n```",
+      "this_17": "1) `setTimeout(obj.method.bind(obj))` 2) `setTimeout(() => obj.method())` 3) `setTimeout(obj.method, 1000)` не сработает.",
+
+      // ==================== КОНСТРУКТОР, NEW ====================
+      "constructor_0": "```js\nfunction User(name, age) {\n  this.name = name;\n  this.age = age;\n}\n```",
+      "constructor_1": "1) создаёт новый объект 2) устанавливает прототип 3) выполняет функцию с this=новый объект 4) возвращает объект.",
+      "constructor_2": "Конвенция, чтобы отличать от обычных функций и напоминать о вызове через new.",
+      "constructor_3": "Объект с полями name='Иван', age=25 и прототипом User.prototype.",
+      "constructor_4": "**new.target** — ссылка на функцию, если вызвана через new, иначе undefined. Проверка: `if (new.target) { ... }`.",
+      "constructor_5": "Если возвращает объект — вернётся он, если примитив — игнорируется и возвращается созданный объект.",
+      "constructor_6": "```js\nfunction Counter() {\n  let count = 0;\n  this.increment = () => ++count;\n  this.decrement = () => --count;\n  this.value = () => count;\n}\n```",
+      "constructor_7": "**prototype** — объект, становящийся прототипом для всех экземпляров. Добавление: `User.prototype.sayHi = function() {}`.",
+      "constructor_8": "Через this — копия метода в каждом экземпляре, больше памяти. Через prototype — один метод на всех, экономия памяти.",
+      "constructor_9": "**instanceof** проверяет цепочку прототипов: `obj instanceof User`.",
+      "constructor_10": "```js\nfunction Stack() {\n  this.items = [];\n  this.push = function(item) { this.items.push(item); };\n  this.pop = function() { return this.items.pop(); };\n  this.peek = function() { return this.items[this.items.length-1]; };\n  this.isEmpty = function() { return this.items.length === 0; };\n}\n```",
+      "constructor_11": "**constructor** — свойство в прототипе, указывающее на функцию-конструктор. Доступно у экземпляра.",
+      "constructor_12": "```js\nfunction myNew(Constructor, ...args) {\n  const obj = Object.create(Constructor.prototype);\n  const result = Constructor.apply(obj, args);\n  return (result && typeof result === 'object') ? result : obj;\n}\n```",
+      "constructor_13": "Фабричный метод — статический метод, создающий объект: `User.createAdmin(name) { return new User(name, true); }`.",
+      "constructor_14": "```js\nfunction LinkedList() {\n  this.head = null;\n  this.append = function(value) {\n    const node = { value, next: null };\n    if (!this.head) this.head = node;\n    else {\n      let current = this.head;\n      while (current.next) current = current.next;\n      current.next = node;\n    }\n  };\n  // другие методы...\n}\n```",
+
+      // ==================== ОПЦИОНАЛЬНАЯ ЦЕПОЧКА ====================
+      "optional_chain_0": "Оператор `?.` позволяет безопасно обращаться к вложенным свойствам, не проверяя каждое промежуточное.",
+      "optional_chain_1": "Короче и читаемее, не вычисляет следующую часть если предыдущее null/undefined.",
+      "optional_chain_2": "`null?.property` → undefined, `undefined?.method()` → undefined (без ошибки).",
+      "optional_chain_3": "```js\nobj.method?.(); // вызывает только если метод существует\n```",
+      "optional_chain_4": "```js\narr?.[0]; // безопасный доступ к индексу\n```",
+      "optional_chain_5": "Нет, `?.[]` можно только для чтения. `obj?.prop = 1` вызовет ошибку.",
+      "optional_chain_6": "```js\nconst city = user?.address?.city ?? 'Неизвестно';\n```",
+      "optional_chain_7": "Короткое замыкание — если левая часть null/undefined, правая не вычисляется и возвращается undefined.",
+      "optional_chain_8": "```js\nfunction getDeep(obj, path) {\n  return path.split('.').reduce((acc, key) => acc?.[key], obj);\n}\n```",
+      "optional_chain_9": "Может скрыть баги если ожидаем обязательное свойство, а его нет — получим undefined вместо ошибки.",
+      "optional_chain_10": "```js\nfunction optChain(obj, ...keys) {\n  return keys.reduce((acc, key) => acc?.[key], obj);\n}\n```",
+      "optional_chain_11": "Для `?.` срабатывают ловушки `get` и `has`, но механизм короткого замыкания встроенный.",
+
+      // ==================== SYMBOL ====================
+      "symbol_0": "Symbol — уникальный примитивный тип. `const sym = Symbol('description')`.",
+      "symbol_1": "`false`, каждый Symbol уникален даже с одинаковым описанием.",
+      "symbol_2": "Описание передаётся в Symbol. Доступ: `sym.description`.",
+      "symbol_3": "`Symbol.for('key')` создаёт/получает символ из глобального реестра.",
+      "symbol_4": "`Symbol.for` — один на весь код (по ключу), Symbol() — всегда уникальный.",
+      "symbol_5": "```js\nconst id = Symbol('id');\nobj[id] = 123;\n```",
+      "symbol_6": "Symbol-ключи игнорируются в for...in, Object.keys, но видны в `Object.getOwnPropertySymbols`.",
+      "symbol_7": "`Object.getOwnPropertySymbols(obj)` возвращает массив Symbol-ключей.",
+      "symbol_8": "`Symbol.iterator`, `Symbol.hasInstance`, `Symbol.toPrimitive`, `Symbol.species`, `Symbol.asyncIterator`.",
+      "symbol_9": "```js\nconst iterable = {\n  [Symbol.iterator]: function* () { yield 1; yield 2; }\n};\n```",
+      "symbol_10": "```js\nconst obj = {\n  value: 42,\n  [Symbol.toPrimitive](hint) {\n    if (hint === 'string') return 'сорок два';\n    if (hint === 'number') return 42;\n    return null;\n  }\n};\n```",
+      "symbol_11": "```js\nclass MyArray {\n  static [Symbol.hasInstance](instance) { return Array.isArray(instance); }\n}\n```",
+      "symbol_12": "**Symbol.species** определяет конструктор для создания новых объектов в методах map, filter и т.д.",
+      "symbol_13": "```js\nconst private = Symbol('private');\nclass MyClass {\n  constructor() { this[private] = 'секрет'; }\n  getSecret() { return this[private]; }\n}\n```",
+      "symbol_14": "```js\nconst asyncIterable = {\n  async *[Symbol.asyncIterator]() { yield 1; yield 2; }\n};\n```",
+
+      // ==================== ПРЕОБРАЗОВАНИЕ В ПРИМИТИВЫ ====================
+      "obj_primitive_0": "Автоматическое преобразование объекта в число/строку/булево в соответствующих контекстах (сложение, сравнение, alert и т.д.).",
+      "obj_primitive_1": "hint = 'string' (для строк), 'number' (для чисел), 'default' (когда не уточняется, например +).",
+      "obj_primitive_2": "**toString()** возвращает строковое представление. Вызывается при преобразовании в строку.",
+      "obj_primitive_3": "**valueOf()** возвращает примитивное значение (если есть). Вызывается при преобразовании в число.",
+      "obj_primitive_4": "`'[object Object]'` — результат метода toString по умолчанию.",
+      "obj_primitive_5": "```js\nconst obj = {\n  [Symbol.toPrimitive](hint) {\n    if (hint === 'number') return 42;\n    if (hint === 'string') return 'объект';\n    return 'default';\n  }\n};\n```",
+      "obj_primitive_6": "Приоритет: `Symbol.toPrimitive` → `valueOf` (для number/default) → `toString` (для string).",
+      "obj_primitive_7": "Сначала `valueOf`, если не вернул примитив — `toString`. Сложение пытается оба.",
+      "obj_primitive_8": "```js\nconst money = {\n  amount: 100, currency: 'USD',\n  toString() { return `${this.amount} ${this.currency}`; },\n  valueOf() { return this.amount; }\n};\n```",
+      "obj_primitive_9": "1) получаем hint = default 2) вызываем `[Symbol.toPrimitive]` если есть 3) иначе valueOf и toString.",
+      "obj_primitive_10": "```js\nconst range = { start: 5, end: 10,\n  valueOf() { return this.end; },\n  [Symbol.toPrimitive](hint) { return hint === 'number' ? this.end : `${this.start}-${this.end}`; }\n};\n```",
+      "obj_primitive_11": "ToPrimitive — абстрактная операция, превращающая объект в примитив с учётом hint. Вызывает перечисленные методы.",
+
+      // ==================== ОБЪЕКТЫ: ПРОДВИНУТЫЕ ====================
+      "obj_advanced_0": "**Object.create(proto)** создаёт новый объект с прототипом proto.",
+      "obj_advanced_1": "Цепочка объектов, где каждый имеет ссылку на свой прототип. Поиск идёт по цепочке вверх, пока не найдёт свойство или не дойдёт до null.",
+      "obj_advanced_2": "Возвращает прототип объекта.",
+      "obj_advanced_3": "**hasOwnProperty** проверяет, что свойство принадлежит самому объекту, а не прототипу.",
+      "obj_advanced_4": "`Object.keys(obj).forEach(key => { ... })` или `for (let key in obj) if (obj.hasOwnProperty(key)) { ... }`.",
+      "obj_advanced_5": "```js\nconst handler = { get(obj, prop) { console.log('get', prop); return obj[prop]; } };\nconst proxy = new Proxy(obj, handler);\n```",
+      "obj_advanced_6": "```js\nconst handler = { get(obj, prop) { return prop in obj ? obj[prop] : 0; } };\n```",
+      "obj_advanced_7": "```js\nconst validator = { set(obj, prop, val) { if (prop === 'age' && val < 0) throw new Error('age must be positive'); obj[prop] = val; } };\n```",
+      "obj_advanced_8": "**Reflect** предоставляет методы для операций над объектами, используется в Proxy для передачи дефолтного поведения.",
+      "obj_advanced_9": "```js\nconst handler = { has(obj, prop) { return prop.startsWith('_') ? false : prop in obj; } };\n```",
+      "obj_advanced_10": "```js\nconst handler = { get(arr, idx) { const i = Number(idx); return i < 0 ? arr[arr.length + i] : arr[i]; } };\n```",
+      "obj_advanced_11": "**Object.getOwnPropertyDescriptors** возвращает все дескрипторы. Копировать: `Object.defineProperties({}, Object.getOwnPropertyDescriptors(obj))`.",
+      "obj_advanced_12": "```js\nfunction reactive(obj, onChange) {\n  return new Proxy(obj, {\n    set(target, prop, val) {\n      target[prop] = val;\n      onChange(prop, val);\n      return true;\n    }\n  });\n}\n```",
+      "obj_advanced_13": "**Proxy.revocable** создаёт прокси, который можно отключить вызовом revoke. Полезно для ограничения доступа по времени.",
+      "obj_advanced_14": "```js\nconst virtual = new Proxy({}, { get(target, prop) { return () => console.log(`Called ${prop}`); } });\n```",
+      "obj_advanced_15": "```js\nfunction observe(obj, cb) {\n  return new Proxy(obj, {\n    set(target, prop, val) { target[prop] = val; cb(prop, val); return true; }\n  });\n}\n```",
+      "obj_advanced_16": "```js\nfunction lazy(obj, prop, init) {\n  let value;\n  Object.defineProperty(obj, prop, {\n    get() { if (value === undefined) value = init(); return value; }\n  });\n}\n```",
+      "obj_advanced_17": "```js\nfunction memoizeProxy(obj) {\n  const cache = new Map();\n  return new Proxy(obj, {\n    get(target, prop) {\n      if (typeof target[prop] !== 'function') return target[prop];\n      return function(...args) {\n        const key = String(args);\n        if (cache.has(key)) return cache.get(key);\n        const result = target[prop].apply(this, args);\n        cache.set(key, result);\n        return result;\n      };\n    }\n  });\n}\n```",
+      "obj_advanced_18": "```js\nfunction deepObservable(obj, cb, path = []) {\n  return new Proxy(obj, {\n    get(target, prop) {\n      const val = target[prop];\n      if (val && typeof val === 'object') return deepObservable(val, cb, [...path, prop]);\n      return val;\n    },\n    set(target, prop, val) {\n      target[prop] = val;\n      cb([...path, prop], val);\n      return true;\n    }\n  });\n}\n```",
+      "obj_advanced_19": "```js\nfunction immutable(obj) {\n  return new Proxy(obj, {\n    set() { throw new Error('Immutable'); },\n    deleteProperty() { throw new Error('Immutable'); },\n    defineProperty() { throw new Error('Immutable'); }\n  });\n}\n```",
+    };
+
+    const TOPICS = [
+      {
+        id: "obj_basics",
+        title: "Объекты: основы",
+        icon: "📦",
+        color: "#06b6d4",
+        tasks: [
+          { d: "easy", t: "Создай объект <code>user</code> с полями <code>name</code>, <code>age</code>, <code>isAdmin</code> и выведи каждое поле." },
+          { d: "easy", t: "Как получить доступ к свойству объекта через точку и через квадратные скобки? В чём разница?" },
+          { d: "easy", t: "Добавь новое свойство <code>email</code> в уже существующий объект." },
+          { d: "easy", t: "Удали свойство из объекта с помощью оператора <code>delete</code>." },
+          { d: "easy", t: "Как проверить существует ли свойство в объекте? Покажи два способа." },
+          { d: "easy", t: "Что такое оператор <code>in</code>? Напиши пример проверки наличия ключа." },
+          { d: "easy", t: "Перебери все ключи объекта с помощью цикла <code>for...in</code>." },
+          { d: "easy", t: "Что такое вычисляемые свойства (computed properties)? Напиши пример с переменной в качестве ключа." },
+          { d: "easy", t: "Что такое shorthand-свойства объекта? Перепиши <code>{name: name, age: age}</code> в короткой форме." },
+          { d: "easy", t: "Как получить массив всех ключей объекта? Как получить массив всех значений?" },
+          { d: "easy", t: "Как получить массив пар <code>[ключ, значение]</code> из объекта?" },
+          { d: "easy", t: "Создай объект с вложенным объектом и обратись к свойству вложенного объекта." },
+          { d: "easy", t: "Что такое деструктуризация объекта? Извлеки <code>name</code> и <code>age</code> из объекта через деструктуризацию." },
+          { d: "easy", t: "Как задать значение по умолчанию при деструктуризации?" },
+          { d: "easy", t: "Что такое spread-оператор <code>...</code> для объектов? Объедини два объекта через него." },
+          { d: "medium", t: "Что такое <code>Object.keys()</code>, <code>Object.values()</code>, <code>Object.entries()</code>? Напиши пример использования каждого." },
+          { d: "medium", t: "Как создать объект из массива пар <code>[ключ, значение]</code> с помощью <code>Object.fromEntries()</code>?" },
+          { d: "medium", t: "Что делает <code>Object.freeze()</code>? Напиши пример — покажи что объект нельзя изменить после заморозки." },
+          { d: "medium", t: "Что делает <code>Object.seal()</code>? Чем отличается от <code>Object.freeze()</code>?" },
+          { d: "medium", t: "Напиши функцию <code>pick(obj, keys)</code> возвращающую новый объект только с указанными ключами." },
+          { d: "medium", t: "Напиши функцию <code>omit(obj, keys)</code> возвращающую объект без указанных ключей." },
+          { d: "medium", t: "Что такое <code>Object.defineProperty()</code>? Как создать свойство только для чтения?" },
+          { d: "hard", t: "Что такое дескрипторы свойств (<code>writable</code>, <code>enumerable</code>, <code>configurable</code>)? Как их посмотреть?" },
+          { d: "hard", t: "Реализуй функцию <code>deepFreeze(obj)</code> рекурсивно замораживающую все вложенные объекты." },
+          { d: "hard", t: "Что такое геттеры и сеттеры (<code>get</code>/<code>set</code>) в объектах? Напиши объект с вычисляемым свойством через геттер." },
+        ],
+      },
+      {
+        id: "obj_copy",
+        title: "Копирование объектов и ссылки",
+        icon: "📋",
+        color: "#818cf8",
+        tasks: [
+          { d: "easy", t: "Почему при присваивании объекта переменной копируется ссылка, а не сам объект?" },
+          { d: "easy", t: "Что произойдёт если изменить свойство объекта через вторую переменную ссылающуюся на тот же объект?" },
+          { d: "easy", t: "Как сделать поверхностную копию объекта через <code>Object.assign()</code>?" },
+          { d: "easy", t: "Как сделать поверхностную копию объекта через spread-оператор <code>{...obj}</code>?" },
+          { d: "easy", t: "Чем поверхностное копирование отличается от глубокого? Покажи на примере вложенного объекта." },
+          { d: "easy", t: "Как сравнить два объекта на равенство? Почему <code>obj1 === obj2</code> не всегда работает как ожидается?" },
+          { d: "medium", t: "Напиши функцию <code>shallowEqual(a, b)</code> сравнивающую объекты по значениям первого уровня." },
+          { d: "medium", t: "Как сделать глубокую копию объекта через <code>JSON.parse(JSON.stringify(obj))</code>? Каковы ограничения этого метода?" },
+          { d: "medium", t: "Как сделать глубокую копию объекта через <code>structuredClone()</code>? Чем он лучше JSON-метода?" },
+          { d: "medium", t: "Напиши рекурсивную функцию <code>deepClone(obj)</code> для глубокого копирования без использования JSON." },
+          { d: "medium", t: "Что такое циклическая ссылка в объекте? Как <code>structuredClone</code> с ней справляется?" },
+          { d: "hard", t: "Реализуй <code>deepEqual(a, b)</code> рекурсивно сравнивающий объекты любой вложенности включая массивы." },
+          { d: "hard", t: "Реализуй <code>deepMerge(target, source)</code> глубоко объединяющий два объекта без мутации." },
+          { d: "hard", t: "Что происходит при копировании объекта содержащего функции, Symbol-ключи или прототипные свойства?" },
+          { d: "hard", t: 'Реализуй <code>immutableSet(obj, path, value)</code> возвращающий новый объект с изменённым вложенным свойством по пути вида <code>"a.b.c"</code>.' },
+        ],
+      },
+      {
+        id: "gc",
+        title: "Сборка мусора",
+        icon: "🗑️",
+        color: "#f472b6",
+        tasks: [
+          { d: "easy", t: "Что такое сборка мусора (garbage collection) в JavaScript?" },
+          { d: "easy", t: 'Что такое "достижимость" объекта? Как JS определяет можно ли удалить объект из памяти?' },
+          { d: "easy", t: 'Что такое алгоритм "mark-and-sweep"? Опиши его работу.' },
+          { d: "easy", t: "Что такое корни (roots) в контексте сборки мусора? Приведи примеры." },
+          { d: "medium", t: "Что такое утечка памяти в JS? Приведи пример когда объект не удаляется хотя больше не нужен." },
+          { d: "medium", t: "Как замыкания могут привести к утечкам памяти? Напиши пример и объясни почему это происходит." },
+          { d: "medium", t: "Что такое <code>WeakRef</code>? Когда он полезен в контексте управления памятью?" },
+          { d: "medium", t: "Что такое <code>FinalizationRegistry</code>? Как использовать его для отслеживания удаления объектов?" },
+          { d: "hard", t: "Как глобальные переменные влияют на сборку мусора? Почему злоупотребление глобальным состоянием опасно для памяти?" },
+          { d: "hard", t: "Как утечки через DOM-ссылки происходят в браузере? Как их обнаружить и устранить?" },
+        ],
+      },
+      {
+        id: "this",
+        title: 'Методы объекта, "this"',
+        icon: "🎯",
+        color: "#f59e0b",
+        tasks: [
+          { d: "easy", t: 'Добавь метод <code>sayHi()</code> в объект <code>user</code>, который выводит <code>"Привет, я " + this.name</code>.' },
+          { d: "easy", t: "Что такое <code>this</code> в методе объекта? Что оно содержит?" },
+          { d: "easy", t: "Что такое shorthand-методы объекта? Перепиши <code>{ greet: function() {} }</code> коротко." },
+          { d: "easy", t: "Что вернёт <code>this</code> внутри обычной функции вызванной без объекта (в строгом режиме и без него)?" },
+          { d: "easy", t: 'Что такое "потеря контекста"? Покажи пример когда метод объекта теряет <code>this</code> при передаче как callback.' },
+          { d: "easy", t: "Как исправить потерю контекста через <code>.bind()</code>? Напиши пример." },
+          { d: "easy", t: "Как использовать стрелочную функцию чтобы сохранить <code>this</code> в методе?" },
+          { d: "medium", t: "Что делает <code>call()</code>? Вызови функцию с явным <code>this</code> через <code>call()</code>." },
+          { d: "medium", t: "Чем <code>apply()</code> отличается от <code>call()</code>? Напиши пример передачи массива аргументов." },
+          { d: "medium", t: 'Что такое <code>bind()</code>? Как создать "привязанную" функцию и когда это полезно?' },
+          { d: "medium", t: "Что произойдёт если вызвать <code>bind()</code> дважды подряд на одной функции?" },
+          { d: "medium", t: "Как работает цепочка методов (method chaining)? Напиши объект с цепочкой методов возвращающих <code>this</code>." },
+          { d: "medium", t: "Напиши метод <code>toString()</code> для объекта <code>user</code> возвращающий читаемое представление." },
+          { d: "hard", t: 'Что такое "мягкое связывание" (soft binding)? Реализуй функцию <code>softBind(fn, ctx)</code>.' },
+          { d: "hard", t: "Что такое явное, неявное и автоматическое связывание <code>this</code>? Опиши приоритет каждого вида." },
+          { d: "hard", t: "Реализуй свой аналог <code>Function.prototype.bind</code> как полифил." },
+          { d: "hard", t: "Что происходит с <code>this</code> при деструктуризации метода из объекта? Как это исправить?" },
+          { d: "hard", t: "Объясни почему <code>setTimeout(obj.method, 1000)</code> теряет контекст и покажи три способа исправить." },
+        ],
+      },
+      {
+        id: "constructor",
+        title: 'Конструктор, оператор "new"',
+        icon: "🏗️",
+        color: "#10b981",
+        tasks: [
+          { d: "easy", t: "Что такое функция-конструктор? Напиши конструктор <code>User(name, age)</code>." },
+          { d: "easy", t: "Что делает оператор <code>new</code> шаг за шагом?" },
+          { d: "easy", t: "Почему имя конструктора принято писать с заглавной буквы?" },
+          { d: "easy", t: 'Что вернёт <code>new User("Иван", 25)</code>? Что будет в созданном объекте?' },
+          { d: "easy", t: "Что такое <code>new.target</code>? Как проверить что функция вызвана через <code>new</code>?" },
+          { d: "easy", t: "Что происходит если конструктор явно возвращает объект? А если примитив?" },
+          { d: "medium", t: "Напиши конструктор <code>Counter()</code> с методами <code>increment()</code>, <code>decrement()</code> и геттером <code>value</code>." },
+          { d: "medium", t: "Что такое <code>prototype</code> функции-конструктора? Как добавить метод через прототип?" },
+          { d: "medium", t: "В чём разница между добавлением метода через <code>this.method = function(){}</code> и через <code>Constructor.prototype.method = function(){}</code>?" },
+          { d: "medium", t: "Что такое instanceof? Как проверить принадлежит ли объект конструктору?" },
+          { d: "medium", t: "Напиши конструктор <code>Stack()</code> с методами <code>push</code>, <code>pop</code>, <code>peek</code>, <code>isEmpty</code>." },
+          { d: "medium", t: "Что такое <code>constructor</code> свойство объекта? Откуда оно берётся?" },
+          { d: "hard", t: "Реализуй собственный аналог оператора <code>new</code> как функцию <code>myNew(Constructor, ...args)</code>." },
+          { d: "hard", t: "Что такое абстрактный фабричный метод в контексте конструкторов JS? Напиши пример." },
+          { d: "hard", t: "Напиши конструктор <code>LinkedList()</code> с методами <code>append</code>, <code>prepend</code>, <code>delete</code>, <code>find</code>." },
+        ],
+      },
+      {
+        id: "optional_chain",
+        title: "Опциональная цепочка '?.'",
+        icon: "🔗",
+        color: "#34d399",
+        tasks: [
+          { d: "easy", t: "Что такое опциональная цепочка <code>?.</code>? Зачем она нужна?" },
+          { d: "easy", t: "Чем <code>user?.address?.city</code> лучше <code>user && user.address && user.address.city</code>?" },
+          { d: "easy", t: "Что вернёт <code>null?.property</code>? А <code>undefined?.method()</code>?" },
+          { d: "easy", t: "Как использовать <code>?.</code> для вызова метода который может не существовать?" },
+          { d: "easy", t: "Как использовать <code>?.</code> для доступа к элементу массива: <code>arr?.[0]</code>?" },
+          { d: "easy", t: "Можно ли использовать <code>?.</code> слева от оператора присваивания? Что произойдёт?" },
+          { d: "medium", t: "Объедини <code>?.</code> с оператором <code>??</code>: верни значение по умолчанию если цепочка обрывается." },
+          { d: "medium", t: 'Что такое "короткое замыкание" в <code>?.</code>? Что если первый элемент цепочки <code>null</code>?' },
+          { d: "medium", t: 'Напиши функцию <code>getDeep(obj, path)</code> безопасно извлекающую значение по пути вида <code>"a.b.c"</code>.' },
+          { d: "medium", t: "Когда <code>?.</code> может скрыть баги? Приведи пример чрезмерного использования." },
+          { d: "hard", t: "Реализуй полифил для <code>?.</code> как функцию <code>optChain(obj, ...keys)</code>." },
+          { d: "hard", t: "Как <code>?.</code> работает с Proxy? Какие ловушки задействуются при обращении через <code>?.</code>?" },
+        ],
+      },
+      {
+        id: "symbol",
+        title: "Тип данных Symbol",
+        icon: "🔮",
+        color: "#c084fc",
+        tasks: [
+          { d: "easy", t: "Что такое Symbol? Как создать Symbol?" },
+          { d: "easy", t: 'Почему каждый Symbol уникален? Что вернёт <code>Symbol("id") === Symbol("id")</code>?' },
+          { d: "easy", t: "Что такое описание (description) Symbol? Как его получить?" },
+          { d: "easy", t: "Что такое глобальный реестр Symbol? Как создать Symbol через <code>Symbol.for()</code>?" },
+          { d: "easy", t: 'Чем <code>Symbol.for("id")</code> отличается от <code>Symbol("id")</code>?' },
+          { d: "easy", t: "Как использовать Symbol в качестве ключа объекта? Покажи пример." },
+          { d: "easy", t: "Почему Symbol-свойства не видны в <code>for...in</code> и <code>Object.keys()</code>?" },
+          { d: "medium", t: "Как получить все Symbol-ключи объекта? Какой метод для этого используется?" },
+          { d: "medium", t: "Что такое well-known Symbols? Перечисли 5 наиболее используемых." },
+          { d: "medium", t: "Что такое <code>Symbol.iterator</code>? Реализуй кастомный итератор для объекта через этот Symbol." },
+          { d: "medium", t: "Что такое <code>Symbol.toPrimitive</code>? Напиши объект с кастомным преобразованием в примитив." },
+          { d: "medium", t: "Что такое <code>Symbol.hasInstance</code>? Как переопределить поведение <code>instanceof</code>?" },
+          { d: "hard", t: "Что такое <code>Symbol.species</code>? Как он влияет на поведение методов вроде <code>map()</code> в наследниках массива?" },
+          { d: "hard", t: "Реализуй приватные свойства объекта через Symbol (до появления приватных полей классов <code>#field</code>)." },
+          { d: "hard", t: "Что такое <code>Symbol.asyncIterator</code>? Реализуй объект поддерживающий <code>for await...of</code>." },
+        ],
+      },
+      {
+        id: "obj_primitive",
+        title: "Преобразование объектов в примитивы",
+        icon: "⚗️",
+        color: "#fb923c",
+        tasks: [
+          { d: "easy", t: "Что такое преобразование объекта в примитив? В каких ситуациях оно происходит?" },
+          { d: "easy", t: "Что такое hint в алгоритме ToPrimitive? Какие три значения он принимает?" },
+          { d: "easy", t: "Что такое метод <code>toString()</code> объекта? Когда он вызывается автоматически?" },
+          { d: "easy", t: "Что такое метод <code>valueOf()</code>? Когда он вызывается при преобразовании?" },
+          { d: "easy", t: "Что вернёт <code>String({})</code>? Почему?" },
+          { d: "medium", t: 'Что такое <code>Symbol.toPrimitive</code>? Напиши объект у которого при числовом контексте возвращается 42, при строковом — <code>"объект"</code>.' },
+          { d: "medium", t: "Какой приоритет у методов <code>Symbol.toPrimitive</code>, <code>valueOf</code>, <code>toString</code> при преобразовании?" },
+          { d: "medium", t: 'Что происходит при <code>obj + ""</code>? Какие методы вызываются и в каком порядке?' },
+          { d: "medium", t: "Напиши объект <code>money</code> с полями <code>amount</code> и <code>currency</code>, который красиво преобразуется в строку и в число." },
+          { d: "hard", t: "Что происходит при сложении двух объектов <code>obj1 + obj2</code>? Разбери шаги алгоритма." },
+          { d: "hard", t: "Реализуй объект <code>range</code> который можно использовать в арифметике: <code>range + 5</code> добавляет 5 к конечному значению диапазона." },
+          { d: "hard", t: "Что такое Abstract Type Conversion в спецификации ECMA-262? Как он связан с ToPrimitive?" },
+        ],
+      },
+      {
+        id: "obj_advanced",
+        title: "Объекты: продвинутые темы",
+        icon: "🚀",
+        color: "#38bdf8",
+        tasks: [
+          { d: "easy", t: "Что такое <code>Object.create(proto)</code>? Как создать объект с заданным прототипом?" },
+          { d: "easy", t: "Что такое прототипная цепочка? Как JS ищет свойство по цепочке прототипов?" },
+          { d: "easy", t: "Что возвращает <code>Object.getPrototypeOf(obj)</code>?" },
+          { d: "easy", t: "Что такое <code>hasOwnProperty()</code>? Зачем проверять собственные свойства отдельно?" },
+          { d: "easy", t: "Как перебрать только собственные свойства объекта, исключая прототипные?" },
+          { d: "medium", t: "Что такое Proxy? Создай простой Proxy логирующий все обращения к свойствам объекта." },
+          { d: "medium", t: "Что такое ловушка <code>get</code> в Proxy? Напиши Proxy возвращающий 0 для несуществующих числовых свойств." },
+          { d: "medium", t: "Что такое ловушка <code>set</code> в Proxy? Напиши валидирующий Proxy запрещающий запись отрицательных чисел." },
+          { d: "medium", t: "Что такое <code>Reflect</code>? Как он используется вместе с Proxy?" },
+          { d: "medium", t: "Что такое ловушка <code>has</code> в Proxy? Переопредели оператор <code>in</code> для объекта." },
+          { d: "medium", t: 'Напиши Proxy реализующий "отрицательные индексы" для массива как в Python.' },
+          { d: "medium", t: "Что такое <code>Object.getOwnPropertyDescriptors()</code>? Как скопировать объект вместе с дескрипторами?" },
+          { d: "hard", t: "Реализуй реактивный объект через Proxy: при изменении любого свойства автоматически вызывается callback." },
+          { d: "hard", t: "Что такое revocable Proxy (<code>Proxy.revocable()</code>)? Когда он полезен?" },
+          { d: "hard", t: 'Реализуй "виртуальный" объект через Proxy у которого любое свойство возвращает функцию логирующую своё имя.' },
+          { d: "hard", t: 'Что такое паттерн "наблюдатель" (Observer) реализованный через Proxy? Напиши рабочий пример.' },
+          { d: "hard", t: 'Как реализовать "ленивую инициализацию" свойств объекта через <code>Object.defineProperty</code> с геттером?' },
+          { d: "hard", t: "Что такое мемоизирующий Proxy? Реализуй Proxy кэширующий результаты вызовов методов объекта." },
+          { d: "hard", t: "Реализуй <code>createObservable(obj, onChange)</code> через Proxy отслеживающий глубокие изменения вложенных объектов." },
+          { d: "hard", t: 'Что такое паттерн "иммутабельный объект" через Proxy? Заблокируй все операции записи и удаления рекурсивно.' },
+        ],
+      },
+    ];
+
+    const STORAGE_KEY = "jsTasks5_done";
+    let done = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+    let currentFilter = "all";
+    let searchQuery = "";
+    const TOTAL = 200;
+
+    function formatAnswer(text) {
+      if (!text) return '<p>Ответ готовится...</p>';
+      let formatted = text
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/```js\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+        .replace(/```ini\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+        .replace(/```json\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+        .replace(/```yaml\n([\s\S]*?)```/g, '<pre><code>$1</code></pre>')
+        .replace(/`([^`]+)`/g, '<code>$1</code>')
+        .replace(/\n/g, '<br>');
+      return `<p>${formatted}</p>`;
+    }
+
+    function toggleAnswer(card, id) {
+      let answerDiv = card.querySelector('.answer-block');
+      if (!answerDiv) {
+        answerDiv = document.createElement('div');
+        answerDiv.className = 'answer-block';
+        const answerText = ANSWERS[id] || 'Ответ готовится...';
+        answerDiv.innerHTML = formatAnswer(answerText);
+        card.appendChild(answerDiv);
+      }
+      answerDiv.classList.toggle('show');
+    }
+
+    function renderAll() {
+      const root = document.getElementById("tasksRoot");
+      root.innerHTML = "";
+
+      let easy = 0,
+        med = 0,
+        hard = 0;
+      TOPICS.forEach((t) =>
+        t.tasks.forEach((tk) => {
+          if (tk.d === "easy") easy++;
+          else if (tk.d === "medium") med++;
+          else hard++;
+        }),
+      );
+      document.getElementById("easyCount").textContent = easy;
+      document.getElementById("medCount").textContent = med;
+      document.getElementById("hardCount").textContent = hard;
+
+      let num = 0;
+      TOPICS.forEach((topic) => {
+        const sec = document.createElement("section");
+        sec.className = "topic-section";
+
+        const hdr = document.createElement("div");
+        hdr.className = "topic-header";
+        hdr.innerHTML = `
+          <div class="topic-icon" style="background:${topic.color}1a;color:${topic.color}">${topic.icon}</div>
+          <span class="topic-title">${topic.title}</span>
+          <span class="topic-count">${topic.tasks.length} заданий</span>
+        `;
+        sec.appendChild(hdr);
+
+        const grid = document.createElement("div");
+        grid.className = "task-grid";
+
+        topic.tasks.forEach((task, i) => {
+          num++;
+          const id = `${topic.id}_${i}`;
+          const isDone = !!done[id];
+
+          const card = document.createElement("div");
+          card.className = "task-card" + (isDone ? " done" : "");
+          card.style.setProperty("--card-color", topic.color);
+          card.dataset.diff = task.d;
+          card.dataset.done = isDone ? "1" : "0";
+          card.dataset.text = task.t.replace(/<[^>]+>/g, "").toLowerCase();
+          card.dataset.id = id;
+
+          const labels = { easy: "Лёгкое", medium: "Среднее", hard: "Сложное" };
+          const classes = { easy: "diff-easy", medium: "diff-medium", hard: "diff-hard" };
+
+          card.innerHTML = `
+            <div class="task-top">
+              <span class="task-num">#${String(num).padStart(3, "0")}</span>
+              <span class="difficulty ${classes[task.d]}">${labels[task.d]}</span>
+            </div>
+            <div class="task-text">${task.t}</div>
+            ${task.code ? `<div class="code-block">${task.code}</div>` : ""}
+            <div class="task-actions">
+              <button class="btn-done" onclick="event.stopPropagation(); toggleDone('${id}', this)">
+                ${isDone ? "✅ Сделано" : "○ Выполнено"}
+              </button>
+            </div>
+          `;
+
+          card.addEventListener('click', (e) => {
+            if (e.target.classList.contains('btn-done')) return;
+            toggleAnswer(card, id);
+          });
+
+          grid.appendChild(card);
+        });
+
+        sec.appendChild(grid);
+        root.appendChild(sec);
+      });
+
+      updateProgress();
+      applyFilter();
+    }
+
+    function toggleDone(id, btn) {
+      done[id] = !done[id];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(done));
+      const card = btn.closest(".task-card");
+      card.classList.toggle("done", done[id]);
+      card.dataset.done = done[id] ? "1" : "0";
+      btn.innerHTML = done[id] ? "✅ Сделано" : "○ Выполнено";
+      updateProgress();
+    }
+
+    function updateProgress() {
+      const cnt = Object.values(done).filter(Boolean).length;
+      const pct = ((cnt / TOTAL) * 100).toFixed(1);
+      document.getElementById("progressBar").style.width = pct + "%";
+      document.getElementById("progressText").textContent = `${cnt} / ${TOTAL}`;
+      document.getElementById("floatCounter").textContent = `✅ ${cnt} / ${TOTAL}`;
+    }
+
+    function setFilter(f, btn) {
+      currentFilter = f;
+      document.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+      applyFilter();
+    }
+
+    function filterTasks() {
+      searchQuery = document.getElementById("searchInput").value.toLowerCase();
+      applyFilter();
+    }
+
+    function applyFilter() {
+      document.querySelectorAll(".task-card").forEach((card) => {
+        let show = true;
+        const d = card.dataset.diff;
+        const dn = card.dataset.done === "1";
+        if (currentFilter === "easy") show = d === "easy";
+        else if (currentFilter === "medium") show = d === "medium";
+        else if (currentFilter === "hard") show = d === "hard";
+        else if (currentFilter === "done") show = dn;
+        else if (currentFilter === "undone") show = !dn;
+        if (searchQuery && !card.dataset.text.includes(searchQuery)) show = false;
+        card.classList.toggle("hidden", !show);
+      });
+
+      document.querySelectorAll(".topic-section").forEach((sec) => {
+        const vis = [...sec.querySelectorAll(".task-card")].some((c) => !c.classList.contains("hidden"));
+        sec.classList.toggle("hidden", !vis);
+      });
+    }
+
+    function resetAll() {
+      if (confirm("Сбросить весь прогресс?")) {
+        done = {};
+        localStorage.removeItem(STORAGE_KEY);
+        renderAll();
+      }
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>
